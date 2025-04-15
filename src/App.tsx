@@ -346,6 +346,8 @@ function App() {
         href="https://fuck-algorithm.github.io/leetcode-hot-100/" 
         className="back-to-list" 
         title="返回 LeetCode Hot 100 列表"
+        target="_blank"
+        rel="noopener noreferrer"
       >
         <span className="back-arrow">←</span>
         <span className="back-text">返回列表</span>
