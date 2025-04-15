@@ -13,7 +13,7 @@ const Legend: React.FC = () => {
       </div>
       <div className="legend-item">
         <div className="legend-color visited"></div>
-        <span>已访问</span>
+        <span>已访问 (Vn表示第n个岛屿)</span>
       </div>
       <div className="legend-item">
         <div className="legend-color current"></div>

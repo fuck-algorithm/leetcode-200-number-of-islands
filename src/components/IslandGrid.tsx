@@ -66,24 +66,22 @@ const IslandGrid = ({
         let color;
         
         // 根据单元格状态设置颜色
-        switch(cell) {
-          case CellState.WATER:
-            color = '#ecf0f1'; // 水域 - 白色
-            break;
-          case CellState.LAND:
-            color = '#2ecc71'; // 未访问陆地 - 绿色
-            break;
-          case CellState.VISITED:
-            color = '#7f8c8d'; // 已访问陆地 - 灰色
-            break;
-          case CellState.CURRENT:
-            color = '#f39c12'; // 当前访问 - 橙色
-            break;
-          case CellState.EXPLORING:
-            color = '#9b59b6'; // 正在探索 - 紫色
-            break;
-          default:
-            color = '#3498db'; // 默认颜色 - 蓝色
+        if (cell === CellState.WATER) {
+          color = '#ecf0f1'; // 水域 - 白色
+        } else if (cell === CellState.LAND) {
+          color = '#2ecc71'; // 未访问陆地 - 绿色
+        } else if (cell === CellState.CURRENT) {
+          color = '#f39c12'; // 当前访问 - 橙色
+        } else if (cell === CellState.EXPLORING) {
+          color = '#9b59b6'; // 正在探索 - 紫色
+        } else if (cell.startsWith('V')) {
+          // 已访问陆地 - 使用不同的灰色色调区分不同的岛屿
+          const islandNumber = parseInt(cell.substring(1)) || 0;
+          // 生成不同岛屿的颜色变化
+          const hue = (islandNumber * 30) % 360; // 色相每个岛屿相差30度
+          color = `hsl(${hue}, 70%, 65%)`; // 使用HSL色彩空间，固定中等亮度和饱和度
+        } else {
+          color = '#3498db'; // 默认颜色 - 蓝色
         }
         
         // 判断是否是当前位置
@@ -107,9 +105,10 @@ const IslandGrid = ({
           .attr('y', i * cellSize + cellSize / 2)
           .attr('text-anchor', 'middle')
           .attr('dominant-baseline', 'middle')
-          .attr('fill', ['0', '2', '4'].includes(cell) ? 'black' : 'white')
-          .attr('font-size', cellSize / 3)
-          .text(cell === CellState.VISITED ? 'V' : (cell === CellState.EXPLORING ? 'E' : cell));
+          .attr('fill', cell === CellState.WATER ? 'black' : 'white')
+          .attr('font-size', cell.startsWith('V') ? cellSize / 3.5 : cellSize / 3)
+          .attr('font-weight', cell.startsWith('V') ? 'bold' : 'normal')
+          .text(cell.startsWith('V') ? cell : (cell === CellState.EXPLORING ? 'E' : cell));
         
         // 如果是当前单元格，添加坐标标签
         if (isCurrentPosition) {

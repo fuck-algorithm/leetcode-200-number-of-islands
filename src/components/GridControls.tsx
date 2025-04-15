@@ -31,7 +31,7 @@ const GridControls: React.FC<GridControlsProps> = ({
           <input
             type="number"
             min="2"
-            max="20"
+            max="50"
             value={rows}
             onChange={(e) => onRowsChange(parseInt(e.target.value) || 5)}
           />
@@ -41,7 +41,7 @@ const GridControls: React.FC<GridControlsProps> = ({
           <input
             type="number"
             min="2"
-            max="20"
+            max="50"
             value={cols}
             onChange={(e) => onColsChange(parseInt(e.target.value) || 5)}
           />

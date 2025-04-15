@@ -15,9 +15,16 @@ import {
 
 type Grid = string[][]
 
+// 生成指定范围内的随机整数
+const getRandomInt = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function App() {
-  const [rows, setRows] = useState<number>(5)
-  const [cols, setCols] = useState<number>(5)
+  // 生成5到20之间的随机值作为初始行列数
+  const initialSize = getRandomInt(5, 20);
+  const [rows, setRows] = useState<number>(initialSize)
+  const [cols, setCols] = useState<number>(initialSize)
   const [landProbability, setLandProbability] = useState<number>(0.4)
   const [grid, setGrid] = useState<Grid>([])
   const [islandCount, setIslandCount] = useState<number | null>(null)
@@ -44,12 +51,26 @@ function App() {
     setMessage('开始遍历网格寻找岛屿...')
   }
   
+  // 设置行数的安全函数
+  const setRowsSafe = (value: number) => {
+    setRows(Math.min(value, 50));
+  }
+  
+  // 设置列数的安全函数
+  const setColsSafe = (value: number) => {
+    setCols(Math.min(value, 50));
+  }
+  
   // 生成随机岛屿网格
   const generateRandomGrid = () => {
+    // 确保行列数在范围内
+    const safeRows = Math.min(rows, 50);
+    const safeCols = Math.min(cols, 50);
+    
     const newGrid: Grid = []
-    for (let i = 0; i < rows; i++) {
+    for (let i = 0; i < safeRows; i++) {
       const row: CellState[] = []
-      for (let j = 0; j < cols; j++) {
+      for (let j = 0; j < safeCols; j++) {
         // 随机生成水域或陆地
         row.push(Math.random() < landProbability ? CellState.LAND : CellState.WATER)
       }
@@ -77,8 +98,9 @@ function App() {
       [CellState.WATER, CellState.LAND, CellState.LAND, CellState.LAND, CellState.WATER],
       [CellState.WATER, CellState.WATER, CellState.WATER, CellState.WATER, CellState.WATER]
     ]
-    setRows(exampleGrid.length)
-    setCols(exampleGrid[0].length)
+    // 使用安全函数设置行列数
+    setRowsSafe(exampleGrid.length)
+    setColsSafe(exampleGrid[0].length)
     setGrid(exampleGrid)
     setIslandCount(null)
     resetAnimation()
@@ -101,8 +123,9 @@ function App() {
       [CellState.WATER, CellState.WATER, CellState.WATER, CellState.LAND, CellState.LAND],
       [CellState.WATER, CellState.WATER, CellState.WATER, CellState.LAND, CellState.LAND]
     ]
-    setRows(exampleGrid.length)
-    setCols(exampleGrid[0].length)
+    // 使用安全函数设置行列数
+    setRowsSafe(exampleGrid.length)
+    setColsSafe(exampleGrid[0].length)
     setGrid(exampleGrid)
     setIslandCount(null)
     resetAnimation()
@@ -140,6 +163,17 @@ function App() {
       const firstRowLength = customGrid[0].length;
       if (customGrid.some(row => row.length !== firstRowLength)) {
         setMessage('输入的网格数据行长度不一致，请检查格式');
+        return;
+      }
+      
+      // 验证网格尺寸不超过最大限制
+      if (customGrid.length > 50) {
+        setMessage('网格行数不能超过50行');
+        return;
+      }
+      
+      if (firstRowLength > 50) {
+        setMessage('网格列数不能超过50列');
         return;
       }
       
@@ -296,6 +330,7 @@ function App() {
   
   // 初始加载时生成一个随机网格
   useEffect(() => {
+    // 使用初始化时的随机尺寸生成网格
     generateRandomGrid()
   }, [])
   
@@ -325,129 +360,23 @@ function App() {
       <div className="main-content">
         <div className="bottom-section">
           <div className="left-column">
-            <div className="grid-controls">
-              <div className="control-group">
-                <label>
-                  行数:
-                  <input
-                    type="number"
-                    min="2"
-                    max="20"
-                    value={rows}
-                    onChange={(e) => setRows(parseInt(e.target.value) || 5)}
-                  />
-                </label>
-                <label>
-                  列数:
-                  <input
-                    type="number"
-                    min="2"
-                    max="20"
-                    value={cols}
-                    onChange={(e) => setCols(parseInt(e.target.value) || 5)}
-                  />
-                </label>
-              </div>
-              
-              <div className="control-group">
-                <label>
-                  陆地概率:
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.1"
-                    value={landProbability}
-                    onChange={(e) => setLandProbability(parseFloat(e.target.value))}
-                  />
-                  {(landProbability * 100).toFixed(0)}%
-                </label>
-              </div>
-              
-              <div className="control-group">
-                <button onClick={generateRandomGrid}>生成随机网格</button>
-                <button onClick={example1}>示例1</button>
-                <button onClick={example2}>示例2</button>
-              </div>
-              
-              <div className="control-group">
-                <label>
-                  <input
-                    type="radio"
-                    name="algorithm"
-                    checked={algorithm === 'dfs'}
-                    onChange={() => {
-                      setAlgorithm('dfs');
-                      if (grid.length > 0) {
-                        calculateIslandCount(grid);
-                      }
-                    }}
-                  />
-                  深度优先搜索 (DFS)
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="algorithm"
-                    checked={algorithm === 'bfs'}
-                    onChange={() => {
-                      setAlgorithm('bfs');
-                      if (grid.length > 0) {
-                        calculateIslandCount(grid);
-                      }
-                    }}
-                  />
-                  广度优先搜索 (BFS)
-                </label>
-              </div>
-            </div>
-            
-            {islandCount !== null && (
-              <div className="result">
-                岛屿数量: <span className="count">{islandCount}</span>
-              </div>
-            )}
-            
-            <div className="custom-grid-container">
-              <label className="custom-grid-label">
-                自定义网格(1表示陆地，0表示水):
-                <textarea
-                  className="custom-grid-input"
-                  rows={4}
-                  placeholder="例如:
-10010
-11000
-00100
-00011"
-                  value={customGridInput}
-                  onChange={(e) => setCustomGridInput(e.target.value)}
-                />
-              </label>
-              <button onClick={handleCustomGridSubmit}>应用自定义网格</button>
-            </div>
-            
-            <div className="legend">
-              <div className="legend-item">
-                <div className="legend-color water"></div>
-                <span>水域 (0)</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color land"></div>
-                <span>陆地 (1)</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color visited"></div>
-                <span>已访问</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color current"></div>
-                <span>当前位置</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color exploring"></div>
-                <span>探索方向</span>
-              </div>
-            </div>
+            <ControlPanel
+              rows={rows}
+              cols={cols}
+              landProbability={landProbability}
+              onRowsChange={setRowsSafe}
+              onColsChange={setColsSafe}
+              onLandProbabilityChange={setLandProbability}
+              onGenerateRandomGrid={generateRandomGrid}
+              onExample1={example1}
+              onExample2={example2}
+              algorithm={algorithm}
+              onAlgorithmChange={setAlgorithm}
+              customGridInput={customGridInput}
+              onCustomGridInputChange={setCustomGridInput}
+              onCustomGridSubmit={handleCustomGridSubmit}
+              islandCount={islandCount}
+            />
           </div>
           
           <div className="right-column">

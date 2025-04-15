@@ -361,6 +361,10 @@ svg {
   font-size: 0.75rem;
 }
 
+.legend-item span {
+  line-height: 1.2;
+}
+
 .legend-color {
   width: 12px;
   height: 12px;
@@ -714,3 +718,17 @@ svg {
   color: var(--text-color);
   font-weight: 500;
 }
+
+/* 添加不同岛屿的颜色样式 */
+.v1 { background-color: hsl(30, 70%, 65%); }
+.v2 { background-color: hsl(60, 70%, 65%); }
+.v3 { background-color: hsl(90, 70%, 65%); }
+.v4 { background-color: hsl(120, 70%, 65%); }
+.v5 { background-color: hsl(150, 70%, 65%); }
+.v6 { background-color: hsl(180, 70%, 65%); }
+.v7 { background-color: hsl(210, 70%, 65%); }
+.v8 { background-color: hsl(240, 70%, 65%); }
+.v9 { background-color: hsl(270, 70%, 65%); }
+.v10 { background-color: hsl(300, 70%, 65%); }
+.v11 { background-color: hsl(330, 70%, 65%); }
+.v12 { background-color: hsl(0, 70%, 65%); }
