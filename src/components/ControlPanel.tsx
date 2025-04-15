@@ -1,4 +1,5 @@
 import React from 'react';
+import './ControlPanel.css';
 import GridControls from './GridControls';
 import AlgorithmSelector from './AlgorithmSelector';
 import CustomGridInput from './CustomGridInput';

@@ -1,18 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
-import IslandGrid from './components/IslandGrid'
-import Stack from './components/Stack'
-import Queue from './components/Queue'
 import AnimationControls from './components/AnimationControls'
 import ControlPanel from './components/ControlPanel'
-import { 
-  CellState, 
-  numIslandsWithAnimation, 
-  numIslandsWithAnimationBFS,
-  AnimationStep, 
-  Position,
-  Grid
-} from './utils/island'
+import GridVisualizer from './components/GridVisualizer'
+import { Grid, AnimationStep } from './utils/island'
+import GridGenerator from './components/GridGenerator'
+import CustomGridProcessor from './components/CustomGridProcessor'
+import AnimationController from './components/AnimationController'
+import AlgorithmCalculator from './components/AlgorithmCalculator'
 
 // 生成指定范围内的随机整数
 const getRandomInt = (min: number, max: number): number => {
@@ -35,19 +30,43 @@ function App() {
   const [algorithm, setAlgorithm] = useState<'dfs' | 'bfs'>('dfs')
   const [customGridInput, setCustomGridInput] = useState<string>('')
   const animationRef = useRef<number | null>(null)
+  const mainContentRef = useRef<HTMLDivElement>(null);
+  
+  // 使用ResizeObserver监听容器大小变化
+  useEffect(() => {
+    if (!mainContentRef.current) return;
+    
+    const updateLayout = () => {
+      // 触发网格组件重新渲染计算
+      window.dispatchEvent(new Event('resize'));
+    };
+    
+    // 初始更新
+    updateLayout();
+    
+    // 创建一个ResizeObserver
+    const resizeObserver = new ResizeObserver(updateLayout);
+    resizeObserver.observe(mainContentRef.current);
+    
+    // 窗口大小变化时也重新计算
+    window.addEventListener('resize', updateLayout);
+    
+    return () => {
+      window.removeEventListener('resize', updateLayout);
+      resizeObserver.disconnect();
+    };
+  }, []);
   
   // 计算岛屿数量和动画步骤
   const calculateIslandCount = (gridToCalculate: Grid) => {
-    // 根据当前算法类型选择不同的遍历函数
-    const steps = algorithm === 'dfs' 
-      ? numIslandsWithAnimation(gridToCalculate)
-      : numIslandsWithAnimationBFS(gridToCalculate);
-      
-    const count = steps.length > 0 ? steps[steps.length - 1].islandCount : 0
-    setIslandCount(count)
-    setAnimationSteps(steps)
-    setCurrentStep(0)
-    setMessage('开始遍历网格寻找岛屿...')
+    AlgorithmCalculator.calculateIslandCount({
+      grid: gridToCalculate,
+      algorithm,
+      setIslandCount,
+      setAnimationSteps,
+      setCurrentStep,
+      setMessage
+    });
   }
   
   // 设置行数的安全函数
@@ -62,173 +81,141 @@ function App() {
   
   // 生成随机岛屿网格
   const generateRandomGrid = () => {
-    // 确保行列数在范围内
-    const safeRows = Math.min(rows, 50);
-    const safeCols = Math.min(cols, 50);
-    
-    const newGrid: Grid = []
-    for (let i = 0; i < safeRows; i++) {
-      const row: CellState[] = []
-      for (let j = 0; j < safeCols; j++) {
-        // 随机生成水域或陆地
-        row.push(Math.random() < landProbability ? CellState.LAND : CellState.WATER)
-      }
-      newGrid.push(row)
-    }
-    setGrid(newGrid)
-    setIslandCount(null)
-    resetAnimation()
-    // 自动计算岛屿数量
-    calculateIslandCount(newGrid)
-    
-    // 填充到自定义输入框
-    const gridString = newGrid.map(row => 
-      row.map(cell => cell === CellState.LAND ? '1' : '0').join('')
-    ).join('\n')
-    setCustomGridInput(gridString)
+    GridGenerator.generateRandomGrid({
+      rows,
+      cols,
+      landProbability,
+      setGrid,
+      setCustomGridInput,
+      resetAnimation,
+      calculateIslandCount
+    });
   }
   
   // 示例1：一个岛屿
   const example1 = () => {
-    const exampleGrid: Grid = [
-      [CellState.WATER, CellState.WATER, CellState.WATER, CellState.WATER, CellState.WATER],
-      [CellState.WATER, CellState.LAND, CellState.LAND, CellState.LAND, CellState.WATER],
-      [CellState.WATER, CellState.LAND, CellState.LAND, CellState.LAND, CellState.WATER],
-      [CellState.WATER, CellState.LAND, CellState.LAND, CellState.LAND, CellState.WATER],
-      [CellState.WATER, CellState.WATER, CellState.WATER, CellState.WATER, CellState.WATER]
-    ]
-    // 使用安全函数设置行列数
-    setRowsSafe(exampleGrid.length)
-    setColsSafe(exampleGrid[0].length)
-    setGrid(exampleGrid)
-    setIslandCount(null)
-    resetAnimation()
-    // 自动计算岛屿数量
-    calculateIslandCount(exampleGrid)
+    const exampleGrid = GridGenerator.generateExample1({
+      rows,
+      cols,
+      landProbability,
+      setGrid,
+      setCustomGridInput,
+      resetAnimation,
+      calculateIslandCount
+    });
     
-    // 填充到自定义输入框
-    const gridString = exampleGrid.map(row => 
-      row.map(cell => cell === CellState.LAND ? '1' : '0').join('')
-    ).join('\n')
-    setCustomGridInput(gridString)
+    // 设置行列数
+    setRowsSafe(exampleGrid.length);
+    setColsSafe(exampleGrid[0].length);
   }
   
   // 示例2：多个岛屿
   const example2 = () => {
-    const exampleGrid: Grid = [
-      [CellState.LAND, CellState.LAND, CellState.WATER, CellState.WATER, CellState.WATER],
-      [CellState.LAND, CellState.LAND, CellState.WATER, CellState.WATER, CellState.WATER],
-      [CellState.WATER, CellState.WATER, CellState.LAND, CellState.WATER, CellState.WATER],
-      [CellState.WATER, CellState.WATER, CellState.WATER, CellState.LAND, CellState.LAND],
-      [CellState.WATER, CellState.WATER, CellState.WATER, CellState.LAND, CellState.LAND]
-    ]
-    // 使用安全函数设置行列数
-    setRowsSafe(exampleGrid.length)
-    setColsSafe(exampleGrid[0].length)
-    setGrid(exampleGrid)
-    setIslandCount(null)
-    resetAnimation()
-    // 自动计算岛屿数量
-    calculateIslandCount(exampleGrid)
+    const exampleGrid = GridGenerator.generateExample2({
+      rows,
+      cols,
+      landProbability,
+      setGrid,
+      setCustomGridInput,
+      resetAnimation,
+      calculateIslandCount
+    });
     
-    // 填充到自定义输入框
-    const gridString = exampleGrid.map(row => 
-      row.map(cell => cell === CellState.LAND ? '1' : '0').join('')
-    ).join('\n')
-    setCustomGridInput(gridString)
+    // 设置行列数
+    setRowsSafe(exampleGrid.length);
+    setColsSafe(exampleGrid[0].length);
   }
   
   // 处理自定义网格输入
   const handleCustomGridSubmit = () => {
-    try {
-      // 解析用户输入的网格数据
-      const inputLines = customGridInput.trim().split('\n');
-      const customGrid: Grid = [];
-      
-      for (const line of inputLines) {
-        const row = line.trim().split('').filter(char => char === '0' || char === '1');
-        if (row.length > 0) {
-          customGrid.push(row);
-        }
-      }
-      
-      // 验证网格是否有效
-      if (customGrid.length === 0) {
-        setMessage('输入的网格数据无效，请检查格式');
-        return;
-      }
-      
-      // 检查每行长度是否一致
-      const firstRowLength = customGrid[0].length;
-      if (customGrid.some(row => row.length !== firstRowLength)) {
-        setMessage('输入的网格数据行长度不一致，请检查格式');
-        return;
-      }
-      
-      // 验证网格尺寸不超过最大限制
-      if (customGrid.length > 50) {
-        setMessage('网格行数不能超过50行');
-        return;
-      }
-      
-      if (firstRowLength > 50) {
-        setMessage('网格列数不能超过50列');
-        return;
-      }
-      
-      // 设置并计算
-      setRows(customGrid.length);
-      setCols(firstRowLength);
-      setGrid(customGrid);
-      resetAnimation();
-      calculateIslandCount(customGrid);
-    } catch (error) {
-      setMessage('解析输入数据时出错，请检查格式');
-    }
+    CustomGridProcessor.processCustomGrid({
+      customGridInput,
+      setGrid,
+      setRows: setRowsSafe,
+      setCols: setColsSafe,
+      resetAnimation,
+      calculateIslandCount,
+      setMessage
+    });
   }
   
   // 动画控制：重置
   const resetAnimation = () => {
-    if (animationRef.current !== null) {
-      cancelAnimationFrame(animationRef.current)
-      animationRef.current = null
-    }
-    setAnimationSteps([])
-    setCurrentStep(0)
-    setIsPlaying(false)
-    setMessage('')
+    AnimationController.resetAnimation({
+      animationRef,
+      setAnimationSteps,
+      currentStep,
+      setCurrentStep,
+      isPlaying,
+      setIsPlaying,
+      animationSteps,
+      setMessage
+    });
   }
   
   // 动画控制：播放/暂停
   const togglePlayPause = () => {
-    setIsPlaying(!isPlaying)
+    AnimationController.togglePlayPause({
+      animationRef,
+      animationSteps,
+      currentStep,
+      setCurrentStep,
+      isPlaying,
+      setIsPlaying,
+      setMessage
+    });
   }
   
   // 动画控制：前进一步
   const stepForward = () => {
-    if (currentStep < animationSteps.length - 1) {
-      setCurrentStep(currentStep + 1)
-    } else {
-      setIsPlaying(false)
-    }
+    AnimationController.stepForward({
+      animationRef,
+      animationSteps,
+      currentStep,
+      setCurrentStep,
+      isPlaying,
+      setIsPlaying,
+      setMessage
+    });
   }
   
   // 动画控制：后退一步
   const stepBackward = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1)
-    }
+    AnimationController.stepBackward({
+      animationRef,
+      animationSteps,
+      currentStep,
+      setCurrentStep,
+      isPlaying,
+      setIsPlaying,
+      setMessage
+    });
   }
   
   // 动画控制：跳转到开始
   const jumpToStart = () => {
-    setCurrentStep(0)
+    AnimationController.jumpToStart({
+      animationRef,
+      animationSteps,
+      currentStep,
+      setCurrentStep,
+      isPlaying,
+      setIsPlaying,
+      setMessage
+    });
   }
   
   // 动画控制：跳转到结束
   const jumpToEnd = () => {
-    setCurrentStep(animationSteps.length - 1)
-    setIsPlaying(false)
+    AnimationController.jumpToEnd({
+      animationRef,
+      animationSteps,
+      currentStep,
+      setCurrentStep,
+      isPlaying,
+      setIsPlaying,
+      setMessage
+    });
   }
   
   // 动画播放效果
@@ -264,40 +251,15 @@ function App() {
   
   // 更新消息
   useEffect(() => {
-    if (animationSteps.length === 0 || currentStep >= animationSteps.length) return
-    
-    const step = animationSteps[currentStep]
-    
-    // 更新消息内容
-    let newMessage = ''
-    
-    if (step.currentPosition) {
-      const [row, col] = step.currentPosition
-      newMessage = `检查位置 (${row}, ${col})`
-      
-      if (step.grid[row][col] === CellState.WATER) {
-        newMessage += ' - 水域，继续搜索'
-      } else if (step.grid[row][col] === CellState.LAND) {
-        newMessage += ' - 发现新陆地，开始探索新岛屿'
-      } else if (step.grid[row][col] === CellState.VISITED) {
-        newMessage += ' - 已访问过的陆地，继续搜索'
-      }
-    } else if (step.islandCount > 0) {
-      newMessage = `已发现 ${step.islandCount} 个岛屿`
-      if (currentStep === animationSteps.length - 1) {
-        newMessage += ' - 搜索完成！'
-      }
-    } else {
-      newMessage = '开始遍历网格寻找岛屿...'
-    }
-    
-    // 添加探索方向的信息
-    if (step.exploringDirection) {
-      let direction = step.exploringDirection
-      newMessage += ` - 向${direction}探索`
-    }
-    
-    setMessage(newMessage)
+    AnimationController.updateMessage({
+      animationRef,
+      animationSteps,
+      currentStep,
+      setCurrentStep,
+      isPlaying,
+      setIsPlaying,
+      setMessage
+    });
   }, [currentStep, animationSteps])
   
   // 键盘快捷键处理
@@ -332,22 +294,6 @@ function App() {
     // 使用初始化时的随机尺寸生成网格
     generateRandomGrid()
   }, [])
-  
-  // 获取当前显示的网格
-  const getCurrentDisplayGrid = (): Grid => {
-    if (animationSteps.length > 0 && currentStep < animationSteps.length) {
-      return animationSteps[currentStep].grid
-    }
-    return grid
-  }
-
-  // 获取当前动画步骤
-  const getCurrentAnimationStep = () => {
-    if (animationSteps.length > 0 && currentStep < animationSteps.length) {
-      return animationSteps[currentStep]
-    }
-    return null
-  }
 
   return (
     <div className="app-container">
@@ -356,7 +302,7 @@ function App() {
         <p className="description">给你一个由 '1'（陆地）和 '0'（水）组成的二维网格，请你计算网格中岛屿的数量。岛屿由相邻的陆地连接而成，可以假设网格的四个边均被水包围。</p>
       </div>
       
-      <div className="main-content">
+      <div ref={mainContentRef} className="main-content">
         <div className="bottom-section">
           <div className="left-column">
             <ControlPanel
@@ -379,34 +325,13 @@ function App() {
           </div>
           
           <div className="right-column">
-            <div className="visualization-container">
-              {/* 将消息框移到这里，网格的上方 */}
-              {animationSteps.length > 0 && currentStep < animationSteps.length && (
-                <div className="message-box top-message">
-                  {message || '点击"生成随机网格"按钮开始演示算法过程'}
-                </div>
-              )}
-              <div className="grid-with-ds-container">
-                <div className="island-grid-container">
-                  {animationSteps.length > 0 && currentStep < animationSteps.length ? (
-                    <IslandGrid 
-                      grid={getCurrentDisplayGrid()} 
-                      currentPosition={getCurrentAnimationStep()?.currentPosition}
-                      exploringDirection={getCurrentAnimationStep()?.exploringDirection}
-                      showAnimation={true}
-                    />
-                  ) : (
-                    <IslandGrid grid={grid} />
-                  )}
-                </div>
-                
-                {animationSteps.length > 0 && currentStep < animationSteps.length && (
-                  algorithm === 'dfs' ? 
-                    <Stack items={animationSteps[currentStep].stack || []} /> : 
-                    <Queue items={animationSteps[currentStep].queue || []} />
-                )}
-              </div>
-            </div>
+            <GridVisualizer
+              grid={grid}
+              animationSteps={animationSteps}
+              currentStep={currentStep}
+              algorithm={algorithm}
+              message={message}
+            />
           </div>
         </div>
       </div>

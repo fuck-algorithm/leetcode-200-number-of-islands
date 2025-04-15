@@ -1,4 +1,5 @@
 import React from 'react';
+import './CustomGridInput.css';
 
 interface CustomGridInputProps {
   value: string;

@@ -1,4 +1,5 @@
 import React from 'react';
+import './DataStructure.css';
 import { Position } from '../utils/island';
 
 interface StackProps {

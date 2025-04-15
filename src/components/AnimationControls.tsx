@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import './AnimationControls.css';
 
 interface AnimationControlsProps {
   isPlaying: boolean;
@@ -144,45 +145,6 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
     };
   };
 
-  // 获取步骤标记的位置
-  const getStepMarkers = () => {
-    if (totalSteps <= 1) return [];
-    
-    // 限制标记的数量，以避免视觉拥挤
-    const maxMarkers = Math.min(totalSteps, 50);
-    const interval = totalSteps > maxMarkers ? Math.ceil(totalSteps / maxMarkers) : 1;
-    
-    const markers = [];
-    for (let i = 0; i < totalSteps; i += interval) {
-      const percentage = ((i / (totalSteps - 1)) * 100);
-      markers.push({
-        position: percentage,
-        isCompleted: i <= currentStep,
-        step: i,
-      });
-    }
-    
-    // 确保最后一个步骤有标记
-    if (totalSteps > 1 && markers[markers.length - 1].step !== totalSteps - 1) {
-      markers.push({
-        position: 100,
-        isCompleted: totalSteps - 1 <= currentStep,
-        step: totalSteps - 1,
-      });
-    }
-    
-    return markers;
-  };
-
-  // 处理点击步骤标记
-  const handleStepMarkerClick = (e: React.MouseEvent, step: number) => {
-    e.stopPropagation();
-    onSliderChange(step);
-  };
-
-  // 渲染步骤标记
-  const stepMarkers = getStepMarkers();
-
   return (
     <div className="animation-controls-footer">
       <div className="control-buttons">
@@ -244,16 +206,6 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
             style={getFillStyle()}
           ></div>
           
-          {stepMarkers.map((marker, index) => (
-            <div 
-              key={index}
-              className={`step-marker ${marker.isCompleted ? 'completed' : ''}`}
-              style={{ left: `${marker.position}%` }}
-              onClick={(e) => handleStepMarkerClick(e, marker.step)}
-              title={`步骤 ${marker.step + 1}`}
-            ></div>
-          ))}
-          
           <div 
             className={`progress-handle ${handlePulse ? 'pulse-handle' : ''}`}
             style={{ left: `${progressPercentage}%` }}
@@ -279,4 +231,4 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
   );
 };
 
-export default AnimationControls; 
+export default AnimationControls;

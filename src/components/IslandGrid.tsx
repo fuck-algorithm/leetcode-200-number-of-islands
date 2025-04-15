@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import './IslandGrid.css';
 import * as d3 from 'd3';
 import { CellState } from '../utils/island';
 
@@ -22,6 +23,41 @@ const IslandGrid = ({
   showAnimation = false
 }: IslandGridProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  
+  // 动态计算容器尺寸
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const updateSize = () => {
+      if (!containerRef.current) return;
+      const container = containerRef.current;
+      const parentRect = container.parentElement?.getBoundingClientRect();
+      
+      if (parentRect) {
+        setContainerSize({
+          width: parentRect.width,
+          height: parentRect.height
+        });
+      }
+    };
+    
+    // 初始化
+    updateSize();
+    
+    // 监听窗口大小变化
+    window.addEventListener('resize', updateSize);
+    
+    // 创建一个ResizeObserver来监视容器大小变化
+    const resizeObserver = new ResizeObserver(updateSize);
+    resizeObserver.observe(containerRef.current);
+    
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      resizeObserver.disconnect();
+    };
+  }, []);
   
   useEffect(() => {
     if (!svgRef.current || !grid.length) return;
@@ -34,13 +70,22 @@ const IslandGrid = ({
     const rows = grid.length;
     const cols = grid[0].length;
     
+    // 计算单元格大小，适应容器尺寸
+    const dynamicCellSize = Math.min(
+      (containerSize.width - 40) / cols,
+      (containerSize.height - 40) / rows
+    );
+    
+    // 使用动态计算的单元格大小或默认大小
+    const actualCellSize = containerSize.width > 0 ? dynamicCellSize : cellSize;
+    
     // 调整视图框大小以包含坐标轴标签
     const margin = { top: 20, left: 20 };
     
     svg
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', `${-margin.left} ${-margin.top} ${cols * cellSize + margin.left} ${rows * cellSize + margin.top}`);
+      .attr('width', cols * actualCellSize + margin.left)
+      .attr('height', rows * actualCellSize + margin.top)
+      .attr('viewBox', `${-margin.left} ${-margin.top} ${cols * actualCellSize + margin.left} ${rows * actualCellSize + margin.top}`);
     
     // 绘制网格
     const gridGroup = svg.append('g').attr('class', 'grid-group');
@@ -90,10 +135,10 @@ const IslandGrid = ({
         // 绘制单元格矩形
         gridGroup
           .append('rect')
-          .attr('x', j * cellSize)
-          .attr('y', i * cellSize)
-          .attr('width', cellSize)
-          .attr('height', cellSize)
+          .attr('x', j * actualCellSize)
+          .attr('y', i * actualCellSize)
+          .attr('width', actualCellSize)
+          .attr('height', actualCellSize)
           .attr('fill', color)
           .attr('stroke', isCurrentPosition ? '#e74c3c' : '#bdc3c7')
           .attr('stroke-width', isCurrentPosition ? 3 : 1);
@@ -101,12 +146,12 @@ const IslandGrid = ({
         // 添加文本标签
         gridGroup
           .append('text')
-          .attr('x', j * cellSize + cellSize / 2)
-          .attr('y', i * cellSize + cellSize / 2)
+          .attr('x', j * actualCellSize + actualCellSize / 2)
+          .attr('y', i * actualCellSize + actualCellSize / 2)
           .attr('text-anchor', 'middle')
           .attr('dominant-baseline', 'middle')
           .attr('fill', cell === CellState.WATER ? 'black' : 'white')
-          .attr('font-size', cell.startsWith('V') ? cellSize / 3.5 : cellSize / 3)
+          .attr('font-size', cell.startsWith('V') ? actualCellSize / 3.5 : actualCellSize / 3)
           .attr('font-weight', cell.startsWith('V') ? 'bold' : 'normal')
           .text(cell.startsWith('V') ? cell : (cell === CellState.EXPLORING ? 'E' : cell));
         
@@ -114,12 +159,12 @@ const IslandGrid = ({
         if (isCurrentPosition) {
           gridGroup
             .append('text')
-            .attr('x', j * cellSize + cellSize / 2)
-            .attr('y', i * cellSize + cellSize / 5)
+            .attr('x', j * actualCellSize + actualCellSize / 2)
+            .attr('y', i * actualCellSize + actualCellSize / 5)
             .attr('text-anchor', 'middle')
             .attr('dominant-baseline', 'middle')
             .attr('fill', '#e74c3c')
-            .attr('font-size', cellSize / 4)
+            .attr('font-size', actualCellSize / 4)
             .attr('font-weight', 'bold')
             .text(`(${i},${j})`);
         }
@@ -148,10 +193,10 @@ const IslandGrid = ({
       }
       
       // 计算箭头起点和终点
-      const startX = j * cellSize + cellSize / 2;
-      const startY = i * cellSize + cellSize / 2;
-      const endX = (j + dx) * cellSize + cellSize / 2;
-      const endY = (i + dy) * cellSize + cellSize / 2;
+      const startX = j * actualCellSize + actualCellSize / 2;
+      const startY = i * actualCellSize + actualCellSize / 2;
+      const endX = (j + dx) * actualCellSize + actualCellSize / 2;
+      const endY = (i + dy) * actualCellSize + actualCellSize / 2;
       
       // 绘制箭头
       gridGroup
@@ -173,12 +218,12 @@ const IslandGrid = ({
     for (let j = 0; j < cols; j++) {
       axisGroup
         .append('text')
-        .attr('x', j * cellSize + cellSize / 2)
+        .attr('x', j * actualCellSize + actualCellSize / 2)
         .attr('y', -8)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .attr('fill', '#bbbbbb')  // 淡灰色
-        .attr('font-size', cellSize / 4)  // 较小字体
+        .attr('font-size', actualCellSize / 4)  // 较小字体
         .text(j);
     }
     
@@ -187,18 +232,18 @@ const IslandGrid = ({
       axisGroup
         .append('text')
         .attr('x', -10)
-        .attr('y', i * cellSize + cellSize / 2)
+        .attr('y', i * actualCellSize + actualCellSize / 2)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .attr('fill', '#bbbbbb')  // 淡灰色
-        .attr('font-size', cellSize / 4)  // 较小字体
+        .attr('font-size', actualCellSize / 4)  // 较小字体
         .text(i);
     }
     
-  }, [grid, width, height, cellSize, currentPosition, exploringDirection, showAnimation]);
+  }, [grid, width, height, cellSize, currentPosition, exploringDirection, showAnimation, containerSize]);
   
   return (
-    <div className="island-grid-container">
+    <div ref={containerRef} className="island-grid-container">
       <svg ref={svgRef}></svg>
     </div>
   );

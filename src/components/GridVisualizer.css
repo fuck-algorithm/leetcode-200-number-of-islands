@@ -1,0 +1,52 @@
+.visualization-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* 防止溢出 */
+  position: relative; /* 允许内部元素绝对定位 */
+}
+
+.grid-with-ds-container {
+  display: flex;
+  flex: 1;
+  height: calc(100% - 60px); /* 高度为容器高度减去消息框高度 */
+  min-height: 0; /* 允许内容收缩 */
+}
+
+.top-message {
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+  background-color: #f8f8f8;
+  border-left: 4px solid var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.8rem;
+  text-align: left;
+  min-height: 40px;
+  max-height: 80px; /* 限制消息高度 */
+  overflow-y: auto; /* 允许滚动 */
+  line-height: 1.4;
+  color: var(--text-color);
+  font-weight: 500;
+  flex-shrink: 0; /* 防止消息框被压缩 */
+}
+
+.message-box {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  min-height: 40px;
+  max-height: 60px;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .grid-with-ds-container {
+    flex-direction: column;
+  }
+} 
