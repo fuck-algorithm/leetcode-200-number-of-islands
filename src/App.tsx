@@ -174,7 +174,6 @@ function App() {
   const resetAnimation = () => {
     AnimationController.resetAnimation({
       animationRef,
-      setAnimationSteps,
       currentStep,
       setCurrentStep,
       isPlaying,

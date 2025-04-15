@@ -418,84 +418,78 @@
 
 /* 控制按钮的工具提示样式增强 - 修复版 */
 .control-button {
-  position: relative;
+  position: relative !important;
 }
 
-/* 自定义工具提示 - 使用data-tooltip属性 */
-.control-button::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-10px);
-  width: max-content;
-  max-width: 250px;
-  padding: 6px 10px;
-  background-color: rgba(33, 33, 33, 0.9);
-  color: white;
-  text-align: center;
-  font-size: 12px;
-  font-weight: normal;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  pointer-events: none;
-  z-index: 10000;
-  opacity: 0;
-  visibility: hidden;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+/* 美化后的tooltip样式 */
+.tooltip {
+  position: fixed !important;
+  z-index: 999999 !important;
+  background-color: rgba(33, 41, 52, 0.95) !important;
+  color: #fff !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  font-weight: normal !important;
+  pointer-events: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  max-width: 250px !important;
+  text-align: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  line-height: 1.5 !important;
+  animation: tooltip-fade-in 0.2s cubic-bezier(0.23, 1, 0.32, 1) !important;
+  backdrop-filter: blur(3px) !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  letter-spacing: 0.3px !important;
 }
 
-/* 鼠标悬停时显示 */
-.control-button:hover::after {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(-6px);
+/* 添加小箭头 */
+.tooltip::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 50% !important;
+  margin-left: -5px !important;
+  border-width: 5px !important;
+  border-style: solid !important;
+  border-color: rgba(33, 41, 52, 0.95) transparent transparent transparent !important;
 }
 
-/* 为播放按钮的提示设置更宽的宽度 */
-.play-button::after {
-  min-width: 120px;
+/* 为不同类型的按钮提供不同的tooltip颜色变体 */
+.play-button .tooltip,
+.tooltip-primary {
+  background-color: rgba(52, 152, 219, 0.95) !important;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25) !important;
 }
 
-/* 进度条和速度控制的工具提示 */
-.step-info, 
-.progress-container,
-.speed-control span,
-.custom-select-trigger {
-  position: relative;
+.play-button .tooltip::after,
+.tooltip-primary::after {
+  border-color: rgba(52, 152, 219, 0.95) transparent transparent transparent !important;
 }
 
-.step-info::after, 
-.progress-container::after,
-.speed-control span::after,
-.custom-select-trigger::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-10px);
-  width: max-content;
-  max-width: 250px;
-  padding: 6px 10px;
-  background-color: rgba(33, 33, 33, 0.9);
-  color: white;
-  text-align: center;
-  font-size: 12px;
-  font-weight: normal;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  pointer-events: none;
-  z-index: 10000;
-  opacity: 0;
-  visibility: hidden;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+.reset-button .tooltip,
+.tooltip-danger {
+  background-color: rgba(231, 76, 60, 0.95) !important;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25) !important;
 }
 
-.step-info:hover::after, 
-.progress-container:hover::after,
-.speed-control span:hover::after,
-.custom-select-trigger:hover::after {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(-6px);
-} 
+.reset-button .tooltip::after,
+.tooltip-danger::after {
+  border-color: rgba(231, 76, 60, 0.95) transparent transparent transparent !important;
+}
+
+/* 改进淡入动画 */
+@keyframes tooltip-fade-in {
+  from { 
+    opacity: 0; 
+    transform: translateY(8px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+

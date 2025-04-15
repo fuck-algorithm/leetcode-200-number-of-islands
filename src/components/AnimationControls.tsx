@@ -1,5 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import './AnimationControls.css';
+
+// 创建一个使用Portal的Tooltip组件
+const TooltipPortal = ({ children }: { children: React.ReactNode }) => {
+  // 确保我们在浏览器环境中
+  if (typeof document === 'undefined') return null;
+  
+  return ReactDOM.createPortal(
+    children,
+    document.body
+  );
+};
 
 interface AnimationControlsProps {
   isPlaying: boolean;
@@ -25,6 +37,76 @@ const speedOptions = [
   { value: 3, label: '3x' }
 ];
 
+// 创建一个简单的Tooltip组件
+const Tooltip = ({ text, style, className }: { text: string, style?: React.CSSProperties, className?: string }) => {
+  return (
+    <TooltipPortal>
+      <div className={`tooltip ${className || ''}`} style={style}>{text}</div>
+    </TooltipPortal>
+  );
+};
+
+// 创建一个带Tooltip的按钮组件
+const ButtonWithTooltip = ({ 
+  onClick, 
+  disabled,
+  className,
+  tooltipText,
+  tooltipClassName,
+  children
+}: {
+  onClick: () => void,
+  disabled?: boolean,
+  className: string,
+  tooltipText: string,
+  tooltipClassName?: string,
+  children: React.ReactNode
+}) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  
+  // 处理鼠标进入
+  const handleMouseEnter = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      // 设置位置在按钮上方
+      setPosition({
+        top: rect.top - 50,
+        left: rect.left + (rect.width / 2)
+      });
+      setShowTooltip(true);
+    }
+  };
+  
+  // 渲染托管到body的tooltip
+  const renderTooltip = () => {
+    if (!showTooltip) return null;
+    
+    const style = {
+      top: `${position.top}px`,
+      left: `${position.left}px`,
+      transform: 'translateX(-50%)'
+    };
+    
+    return <Tooltip text={tooltipText} style={style} className={tooltipClassName} />;
+  };
+  
+  return (
+    <button
+      ref={buttonRef}
+      onClick={onClick}
+      className={className}
+      disabled={disabled}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      {children}
+      {renderTooltip()}
+    </button>
+  );
+};
+
 const AnimationControls: React.FC<AnimationControlsProps> = ({
   isPlaying,
   onPlayPause,
@@ -46,8 +128,13 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
   const [handlePulse, setHandlePulse] = useState(false);
   const [previousStep, setPreviousStep] = useState(currentStep);
   const [isSpeedMenuOpen, setIsSpeedMenuOpen] = useState(false);
+  const [showProgressTooltip, setShowProgressTooltip] = useState(false);
+  const [showStepInfoTooltip, setShowStepInfoTooltip] = useState(false);
+  const [showSpeedTooltip, setShowSpeedTooltip] = useState(false);
+  const [showSpeedSelectTooltip, setShowSpeedSelectTooltip] = useState(false);
   const animationRef = useRef<number | null>(null);
   const lastPlayStateRef = useRef(isPlaying);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   
   // 处理键盘快捷键
   useEffect(() => {
@@ -189,52 +276,91 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
 
   return (
     <div className="animation-controls-footer">
+      
+      
       <div className="control-buttons">
-        <button 
+        <ButtonWithTooltip 
           onClick={onJumpToStart} 
           className="control-button" 
-          data-tooltip="跳到开始 (快捷键: Home) - 跳转到动画的第一步"
+          tooltipText="跳到开始 (快捷键: Home) - 跳转到动画的第一步"
+          tooltipClassName="tooltip-primary"
           disabled={currentStep === 0}
-        >⏮</button>
-        <button 
+        >
+          ⏮
+        </ButtonWithTooltip>
+        
+        <ButtonWithTooltip 
           onClick={onStepBackward} 
           className="control-button" 
-          data-tooltip="上一步 (快捷键: ←左方向键) - 回到前一步动画"
+          tooltipText="上一步 (快捷键: ←左方向键) - 回到前一步动画"
+          tooltipClassName="tooltip-primary"
           disabled={currentStep === 0}
         >
           <span>←</span>
-        </button>
-        <button 
+        </ButtonWithTooltip>
+        
+        <ButtonWithTooltip 
           onClick={onPlayPause} 
           className={`control-button play-button ${isPlaying ? 'playing' : ''}`} 
-          data-tooltip={isPlaying ? "暂停 (快捷键: 空格键) - 暂停自动播放" : "播放 (快捷键: 空格键) - 开始自动播放动画"}
+          tooltipText={isPlaying ? "暂停 (快捷键: 空格键) - 暂停自动播放" : "播放 (快捷键: 空格键) - 开始自动播放动画"}
+          tooltipClassName="tooltip-primary"
         >
           {isPlaying ? '⏸' : '▶'}
-        </button>
-        <button 
+        </ButtonWithTooltip>
+        
+        <ButtonWithTooltip 
           onClick={onStepForward} 
           className="control-button" 
-          data-tooltip="下一步 (快捷键: →右方向键) - 前进到下一步动画"
+          tooltipText="下一步 (快捷键: →右方向键) - 前进到下一步动画"
+          tooltipClassName="tooltip-primary"
           disabled={currentStep === totalSteps - 1}
         >
           <span>→</span>
-        </button>
-        <button 
+        </ButtonWithTooltip>
+        
+        <ButtonWithTooltip 
           onClick={onJumpToEnd} 
           className="control-button" 
-          data-tooltip="跳到结束 (快捷键: End) - 跳转到动画的最后一步"
+          tooltipText="跳到结束 (快捷键: End) - 跳转到动画的最后一步"
+          tooltipClassName="tooltip-primary"
           disabled={currentStep === totalSteps - 1}
-        >⏭</button>
-        <button 
+        >
+          ⏭
+        </ButtonWithTooltip>
+        
+        <ButtonWithTooltip 
           onClick={onReset} 
           className="control-button reset-button" 
-          data-tooltip="重置 (快捷键: R键) - 将动画重置到初始状态，清除所有动画步骤"
-        >R</button>
+          tooltipText="重置 (快捷键: R键) - 将动画重置到第一步"
+          tooltipClassName="tooltip-danger"
+        >
+          R
+        </ButtonWithTooltip>
       </div>
       
       <div className="animation-progress">
-        <div className="step-info" data-tooltip="当前步数 / 总步数">
+        <div 
+          className="step-info"
+          onMouseEnter={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            setTooltipPosition({
+              top: rect.top - 40,
+              left: rect.left + rect.width / 2
+            });
+            setShowStepInfoTooltip(true);
+          }}
+          onMouseLeave={() => setShowStepInfoTooltip(false)}
+        >
           {currentStep + 1} / {totalSteps || 1}
+          {showStepInfoTooltip && <Tooltip 
+            text="当前步数 / 总步数" 
+            className="tooltip-primary"
+            style={{
+              top: `${tooltipPosition.top}px`,
+              left: `${tooltipPosition.left}px`,
+              transform: 'translateX(-50%)'
+            }} 
+          />}
         </div>
         
         <div 
@@ -242,7 +368,15 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
           className={`progress-container ${isDragging ? 'dragging' : ''}`}
           onClick={handleProgressClick}
           onMouseDown={handleMouseDown}
-          data-tooltip="动画进度条 - 拖动以跳转到特定步骤"
+          onMouseEnter={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            setTooltipPosition({
+              top: rect.top - 40,
+              left: rect.left + rect.width / 2
+            });
+            setShowProgressTooltip(true);
+          }}
+          onMouseLeave={() => setShowProgressTooltip(false)}
         >
           <div 
             className={`progress-fill ${showPulse ? 'pulse-effect' : ''}`}
@@ -253,18 +387,67 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
             className={`progress-handle ${handlePulse ? 'pulse-handle' : ''}`}
             style={{ left: `${progressPercentage}%` }}
           ></div>
+          
+          {showProgressTooltip && <Tooltip 
+            text="拖动滑块以跳转到特定步骤" 
+            className="tooltip-primary"
+            style={{
+              top: `${tooltipPosition.top}px`,
+              left: `${tooltipPosition.left}px`,
+              transform: 'translateX(-50%)'
+            }} 
+          />}
         </div>
         
         <div className="speed-control" ref={speedSelectRef}>
-          <span data-tooltip="设置动画播放速度">速度:</span>
+          <span
+            onMouseEnter={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setTooltipPosition({
+                top: rect.top - 40,
+                left: rect.left + rect.width / 2
+              });
+              setShowSpeedTooltip(true);
+            }}
+            onMouseLeave={() => setShowSpeedTooltip(false)}
+          >
+            速度:
+            {showSpeedTooltip && <Tooltip 
+              text="调整动画播放速度" 
+              className="tooltip-primary"
+              style={{
+                top: `${tooltipPosition.top}px`,
+                left: `${tooltipPosition.left}px`,
+                transform: 'translateX(-50%)'
+              }} 
+            />}
+          </span>
+          
           <div className="custom-select-container">
             <div 
               className="custom-select-trigger" 
               onClick={toggleSpeedMenu}
-              data-tooltip="点击更改动画播放速度"
+              onMouseEnter={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                setTooltipPosition({
+                  top: rect.top - 40,
+                  left: rect.left + rect.width / 2
+                });
+                setShowSpeedSelectTooltip(true);
+              }}
+              onMouseLeave={() => setShowSpeedSelectTooltip(false)}
             >
               {getCurrentSpeedLabel()}
               <span className="custom-select-arrow"></span>
+              {showSpeedSelectTooltip && <Tooltip 
+                text="点击选择播放速度" 
+                className="tooltip-primary"
+                style={{
+                  top: `${tooltipPosition.top}px`,
+                  left: `${tooltipPosition.left}px`,
+                  transform: 'translateX(-50%)'
+                }} 
+              />}
             </div>
             
             {isSpeedMenuOpen && (

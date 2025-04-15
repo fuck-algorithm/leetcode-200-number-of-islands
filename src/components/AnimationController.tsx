@@ -15,15 +15,11 @@ export interface AnimationControllerProps {
 const AnimationController = {
   // 动画控制：重置
   resetAnimation: (props: AnimationControllerProps) => {
-    const { animationRef, setAnimationSteps, setCurrentStep, setIsPlaying, setMessage } = props;
+    const { animationRef, setIsPlaying, setCurrentStep, setMessage } = props;
     
     if (animationRef.current !== null) {
       cancelAnimationFrame(animationRef.current);
       animationRef.current = null;
-    }
-    
-    if (setAnimationSteps) {
-      setAnimationSteps([]);
     }
     
     setCurrentStep(0);
