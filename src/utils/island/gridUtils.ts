@@ -14,7 +14,7 @@ export const cloneGrid = (grid: Grid): Grid => {
 };
 
 /**
- * 生成随机网格数据
+ * 网格生成随机数据数据
  * @param rows 行数
  * @param cols 列数
  * @param landProbability 陆地概率 (0-1)

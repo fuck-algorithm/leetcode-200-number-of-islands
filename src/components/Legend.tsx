@@ -14,7 +14,10 @@ const Legend: React.FC = () => {
       </div>
       <div className="legend-item">
         <div className="legend-color visited"></div>
-        <span>已访问 (Vn表示第n个岛屿)</span>
+        <div className="legend-text">
+          <span>已访问</span>
+          <span className="legend-sub-text">(Vn表示第n个岛屿)</span>
+        </div>
       </div>
       <div className="legend-item">
         <div className="legend-color current"></div>

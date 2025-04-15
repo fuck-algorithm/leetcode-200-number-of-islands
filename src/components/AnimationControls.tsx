@@ -16,6 +16,15 @@ interface AnimationControlsProps {
   onSliderChange: (step: number) => void;
 }
 
+// 定义速度选项
+const speedOptions = [
+  { value: 0.5, label: '0.5x' },
+  { value: 1, label: '1x' },
+  { value: 1.5, label: '1.5x' },
+  { value: 2, label: '2x' },
+  { value: 3, label: '3x' }
+];
+
 const AnimationControls: React.FC<AnimationControlsProps> = ({
   isPlaying,
   onPlayPause,
@@ -31,10 +40,12 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
   onSliderChange
 }) => {
   const progressContainerRef = useRef<HTMLDivElement>(null);
+  const speedSelectRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
   const [handlePulse, setHandlePulse] = useState(false);
   const [previousStep, setPreviousStep] = useState(currentStep);
+  const [isSpeedMenuOpen, setIsSpeedMenuOpen] = useState(false);
   const animationRef = useRef<number | null>(null);
   const lastPlayStateRef = useRef(isPlaying);
   
@@ -65,6 +76,20 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onPlayPause, onStepForward, onStepBackward, onReset, onJumpToStart, onJumpToEnd]);
+  
+  // 处理点击外部关闭速度菜单
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (speedSelectRef.current && !speedSelectRef.current.contains(event.target as Node)) {
+        setIsSpeedMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   
   // 播放状态变更时触发脉冲效果
   useEffect(() => {
@@ -144,6 +169,23 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
       width: `${progressPercentage}%`,
     };
   };
+  
+  // 找到当前速度对应的标签文本
+  const getCurrentSpeedLabel = () => {
+    const option = speedOptions.find(opt => opt.value === currentSpeed);
+    return option ? option.label : '1x';
+  };
+  
+  // 切换速度菜单的开关状态
+  const toggleSpeedMenu = () => {
+    setIsSpeedMenuOpen(!isSpeedMenuOpen);
+  };
+  
+  // 处理速度选择
+  const handleSpeedSelect = (value: number) => {
+    onSpeedChange(value);
+    setIsSpeedMenuOpen(false);
+  };
 
   return (
     <div className="animation-controls-footer">
@@ -212,18 +254,44 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
           ></div>
         </div>
         
-        <div className="speed-control">
+        <div className="speed-control" ref={speedSelectRef}>
           <span>速度:</span>
+          <div className="custom-select-container">
+            <div 
+              className="custom-select-trigger" 
+              onClick={toggleSpeedMenu}
+            >
+              {getCurrentSpeedLabel()}
+              <span className="custom-select-arrow"></span>
+            </div>
+            
+            {isSpeedMenuOpen && (
+              <div className="custom-select-options">
+                {speedOptions.map(option => (
+                  <div 
+                    key={option.value} 
+                    className={`custom-select-option ${option.value === currentSpeed ? 'selected' : ''}`} 
+                    onClick={() => handleSpeedSelect(option.value)}
+                  >
+                    {option.label}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {/* 保留原始选择框作为隐藏的后备方案 */}
           <select 
-            className="speed-select"
+            className="speed-select visually-hidden"
             value={currentSpeed}
             onChange={(e) => onSpeedChange(Number(e.target.value))}
+            aria-hidden="true"
           >
-            <option value="0.5">0.5x</option>
-            <option value="1">1x</option>
-            <option value="1.5">1.5x</option>
-            <option value="2">2x</option>
-            <option value="3">3x</option>
+            {speedOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
       </div>

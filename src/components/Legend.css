@@ -20,6 +20,20 @@
   line-height: 1.2;
 }
 
+/* 添加图例文本的容器样式 */
+.legend-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+/* 添加图例子文本样式 */
+.legend-sub-text {
+  font-size: 0.65rem;
+  color: #666;
+  margin-top: 1px;
+}
+
 .legend-color {
   width: 12px;
   height: 12px;

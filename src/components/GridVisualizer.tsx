@@ -53,7 +53,7 @@ const GridVisualizer: React.FC<GridVisualizerProps> = ({
       {/* 消息框，显示在网格上方 */}
       {animationSteps.length > 0 && currentStep < animationSteps.length && (
         <div className="message-box top-message">
-          {message || '点击"生成随机网格"按钮开始演示算法过程'}
+          {message || '点击"网格生成随机数据"按钮开始演示算法过程'}
         </div>
       )}
       <div className="grid-with-ds-container">

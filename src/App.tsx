@@ -19,18 +19,36 @@ function App() {
   const initialSize = getRandomInt(5, 20);
   const [rows, setRows] = useState<number>(initialSize)
   const [cols, setCols] = useState<number>(initialSize)
-  const [landProbability, setLandProbability] = useState<number>(0.4)
+  // 从localStorage读取用户上次设置的陆地概率，如果没有则使用默认值0.4
+  const [landProbability, setLandProbability] = useState<number>(() => {
+    const savedProbability = localStorage.getItem('landProbability');
+    return savedProbability ? Number(savedProbability) : 0.4;
+  });
   const [grid, setGrid] = useState<Grid>([])
   const [islandCount, setIslandCount] = useState<number | null>(null)
   const [animationSteps, setAnimationSteps] = useState<AnimationStep[]>([])
   const [currentStep, setCurrentStep] = useState<number>(0)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
-  const [animationSpeed, setAnimationSpeed] = useState<number>(500)
+  // 从localStorage读取用户上次选择的速度，如果没有则使用默认值1
+  const [animationSpeed, setAnimationSpeed] = useState<number>(() => {
+    const savedSpeed = localStorage.getItem('animationSpeed');
+    return savedSpeed ? Number(savedSpeed) : 1;
+  })
   const [message, setMessage] = useState<string>('')
   const [algorithm, setAlgorithm] = useState<'dfs' | 'bfs'>('dfs')
   const [customGridInput, setCustomGridInput] = useState<string>('')
   const animationRef = useRef<number | null>(null)
   const mainContentRef = useRef<HTMLDivElement>(null);
+  
+  // 当陆地概率变化时，保存到localStorage
+  useEffect(() => {
+    localStorage.setItem('landProbability', landProbability.toString());
+  }, [landProbability]);
+  
+  // 当速度变化时，保存到localStorage
+  useEffect(() => {
+    localStorage.setItem('animationSpeed', animationSpeed.toString());
+  }, [animationSpeed]);
   
   // 使用ResizeObserver监听容器大小变化
   useEffect(() => {
@@ -71,12 +89,14 @@ function App() {
   
   // 设置行数的安全函数
   const setRowsSafe = (value: number) => {
-    setRows(Math.min(value, 50));
+    const safeValue = Math.min(value, 50);
+    setRows(safeValue);
   }
   
   // 设置列数的安全函数
   const setColsSafe = (value: number) => {
-    setCols(Math.min(value, 50));
+    const safeValue = Math.min(value, 50);
+    setCols(safeValue);
   }
   
   // 生成随机岛屿网格
@@ -105,8 +125,9 @@ function App() {
     });
     
     // 设置行列数
-    setRowsSafe(exampleGrid.length);
-    setColsSafe(exampleGrid[0].length);
+    const newSize = exampleGrid.length;
+    setRowsSafe(newSize);
+    setColsSafe(newSize);
   }
   
   // 示例2：多个岛屿
@@ -122,8 +143,9 @@ function App() {
     });
     
     // 设置行列数
-    setRowsSafe(exampleGrid.length);
-    setColsSafe(exampleGrid[0].length);
+    const newSize = exampleGrid.length;
+    setRowsSafe(newSize);
+    setColsSafe(newSize);
   }
   
   // 处理自定义网格输入
@@ -236,9 +258,13 @@ function App() {
         })
       }
 
+      // 使用速度值计算延迟时间
+      // 速度1x对应500ms延迟，速度越大延迟越短
+      const delay = Math.round(500 / animationSpeed);
+
       const timeoutId = setTimeout(() => {
         animationRef.current = requestAnimationFrame(animate)
-      }, animationSpeed)
+      }, delay)
 
       return () => {
         clearTimeout(timeoutId)
