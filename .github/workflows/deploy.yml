@@ -23,15 +23,32 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: 显示Node和NPM版本
+        run: |
+          node -v
+          npm -v
+
+      - name: 配置NPM
+        run: |
+          npm config set legacy-peer-deps true
+          npm config set fetch-retries 3
+          npm config set fetch-retry-mintimeout 5000
+          npm config set fetch-retry-maxtimeout 60000
+
       - name: 安装依赖
-        run: npm install
+        run: npm install --no-fund --no-audit --verbose
+
+      - name: 查看目录结构
+        run: ls -la
+        
+      - name: 列出包含的依赖
+        run: npm list --depth=0
 
       - name: 构建
         run: npm run build
 
       - name: 部署到GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          folder: dist
-          branch: gh-pages
-          clean: true 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist 
