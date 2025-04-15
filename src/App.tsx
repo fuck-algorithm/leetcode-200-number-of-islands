@@ -10,10 +10,9 @@ import {
   numIslandsWithAnimation, 
   numIslandsWithAnimationBFS,
   AnimationStep, 
-  Position
-} from './utils/islandSolver'
-
-type Grid = string[][]
+  Position,
+  Grid
+} from './utils/island'
 
 // 生成指定范围内的随机整数
 const getRandomInt = (min: number, max: number): number => {
@@ -353,7 +352,7 @@ function App() {
   return (
     <div className="app-container">
       <div className="top-section">
-        <h1>岛屿数量计算器 (LeetCode 200)</h1>
+        <h1>LeetCode 200 - 岛屿数量可视化计算器</h1>
         <p className="description">给你一个由 '1'（陆地）和 '0'（水）组成的二维网格，请你计算网格中岛屿的数量。岛屿由相邻的陆地连接而成，可以假设网格的四个边均被水包围。</p>
       </div>
       

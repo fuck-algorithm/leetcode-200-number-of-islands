@@ -1,5 +1,5 @@
 import React from 'react';
-import { Position } from '../utils/islandSolver';
+import { Position } from '../utils/island';
 
 interface StackProps {
   items: Position[];

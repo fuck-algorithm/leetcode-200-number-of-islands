@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { CellState } from '../utils/islandSolver';
+import { CellState } from '../utils/island';
 
 interface IslandGridProps {
   grid: string[][];
