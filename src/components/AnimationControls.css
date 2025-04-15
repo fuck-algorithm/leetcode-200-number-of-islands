@@ -5,75 +5,89 @@
   left: 0;
   right: 0;
   background-color: rgba(255, 255, 255, 0.95);
-  padding: 0.5rem 0.8rem;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.15rem 0.4rem; /* 进一步减小内边距 */
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.04); /* 减轻阴影 */
   z-index: 100;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.2rem; /* 从0.3rem减小到0.2rem */
   backdrop-filter: blur(5px);
-  border-top: 1px solid var(--border-color);
-  height: 60px; /* 固定控制条高度 */
+  border-top: 1px solid rgba(0, 0, 0, 0.05); /* 减轻边框 */
+  height: 36px; /* 从40px减小到36px */
+  margin-top: 0;
 }
 
 .control-buttons {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.15rem; /* 从0.2rem减小到0.15rem */
   margin-bottom: 0;
+  margin-right: 0.15rem; /* 从0.2rem减小到0.15rem */
 }
 
 .control-button {
-  background-color: var(--light-bg);
+  background-color: #f0f2f5;
   border: none;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 26px; /* 从28px减小到26px */
+  height: 26px; /* 从28px减小到26px */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: unset;
   position: relative;
   overflow: hidden;
+  color: #424242;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); /* 减轻阴影 */
+  margin: 0;
 }
 
 .control-button:hover {
-  background-color: #dfe6e9;
-  transform: scale(1.05);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  background-color: #e6e8eb;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 .control-button:active {
-  transform: scale(0.95);
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .control-button:disabled {
-  opacity: 0.3;
+  opacity: 0.4;
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+  background-color: #f4f4f4;
 }
 
 .play-button {
   background-color: var(--primary-color);
   color: white;
-  width: 36px;
-  height: 36px;
+  width: 32px; /* 从34px减小到32px */
+  height: 32px; /* 从34px减小到32px */
   position: relative;
   overflow: hidden;
-  font-size: 1.2em;
+  box-shadow: 0 1px 2px rgba(52, 152, 219, 0.25); /* 减轻阴影 */
 }
 
 .play-button:hover {
   background-color: var(--hover-color);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
 }
 
 .play-button.playing {
   background-color: #ff5252;
+  box-shadow: 0 2px 5px rgba(255, 82, 82, 0.3);
+}
+
+.play-button.playing:hover {
+  background-color: #ff3232;
+  box-shadow: 0 4px 8px rgba(255, 82, 82, 0.4);
 }
 
 .play-button.playing::before {
@@ -85,44 +99,48 @@
   top: 0;
   left: 0;
   opacity: 0;
-  animation: pulse 1s ease-in-out infinite;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .reset-button {
   background-color: var(--highlight-color);
   color: white;
+  box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
 }
 
 .reset-button:hover {
   background-color: #c0392b;
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
 }
 
 .animation-controls-footer .animation-progress {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.15rem; /* 从0.2rem减小到0.15rem */
   margin-bottom: 0;
   flex: 1;
   position: relative;
+  max-width: calc(100% - 200px); /* 从210px减小到200px */
 }
 
 .step-info {
-  min-width: 60px;
+  min-width: 50px; /* 从55px减小到50px */
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.65rem; /* 从0.7rem减小到0.65rem */
   font-weight: bold;
   color: #34495e;
   background-color: rgba(240, 240, 240, 0.7);
-  padding: 0.2rem 0.4rem;
+  padding: 0.1rem 0.25rem; /* 减小内边距 */
   border-radius: 3px;
+  margin: 0;
 }
 
 /* 新的进度条样式 */
 .animation-progress .progress-container {
   flex: 1;
-  height: 8px;
+  height: 6px; /* 减小进度条高度 */
   background-color: #e0e0e0;
-  border-radius: 4px;
+  border-radius: 3px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
@@ -215,10 +233,11 @@
 .speed-control {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.75rem;
-  min-width: 100px;
+  gap: 0.15rem; /* 从0.2rem减小到0.15rem */
+  font-size: 0.65rem; /* 从0.7rem减小到0.65rem */
+  min-width: 85px; /* 从90px减小到85px */
   position: relative;
+  margin-left: 0.15rem; /* 从0.2rem减小到0.15rem */
 }
 
 .speed-control span {
@@ -491,5 +510,63 @@
     opacity: 1; 
     transform: translateY(0) scale(1); 
   }
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 0; }
+  100% { opacity: 0.7; }
+}
+
+/* 控制按钮图标样式优化 */
+.control-button svg {
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+}
+
+.play-button svg {
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+  width: 26px;
+  height: 26px;
+}
+
+/* 为禁用按钮添加视觉反馈 */
+.control-button:disabled svg {
+  opacity: 0.4;
+}
+
+/* 鼠标悬停时按钮图标动效 */
+.control-button:hover svg {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.control-button:active svg {
+  transform: scale(0.9);
+}
+
+/* 控制图标样式 */
+.control-icon {
+  font-size: 12px; /* 从13px减小到12px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.play-button .control-icon {
+  font-size: 14px; /* 从15px减小到14px */
+}
+
+/* 修改悬停效果，针对图标进行优化 */
+.control-button:hover .control-icon {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.control-button:active .control-icon {
+  transform: scale(0.9);
 }
 

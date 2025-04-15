@@ -33,9 +33,9 @@ interface AnimationControlsProps {
 const speedOptions = [
   { value: 0.5, label: '0.5x' },
   { value: 1, label: '1x' },
-  { value: 1.5, label: '1.5x' },
   { value: 2, label: '2x' },
-  { value: 3, label: '3x' }
+  { value: 3, label: '3x' },
+  { value: 5, label: '5x' }
 ];
 
 // 创建一个简单的Tooltip组件
@@ -282,59 +282,59 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
         <ButtonWithTooltip 
           onClick={onJumpToStart} 
           className="control-button" 
-          tooltipText={t('animation.jumpToStart')}
+          tooltipText={`${t('animation.jumpToStart')} (Home)`}
           tooltipClassName="tooltip-primary"
           disabled={currentStep === 0}
         >
-          ⏮
+          <span className="control-icon">⏮</span>
         </ButtonWithTooltip>
         
         <ButtonWithTooltip 
           onClick={onStepBackward} 
           className="control-button" 
-          tooltipText={t('animation.stepBackward')}
+          tooltipText={`${t('animation.stepBackward')} (←)`}
           tooltipClassName="tooltip-primary"
           disabled={currentStep === 0}
         >
-          ⏪
+          <span className="control-icon">◀</span>
         </ButtonWithTooltip>
         
         <ButtonWithTooltip 
           onClick={onPlayPause} 
           className={`control-button play-button ${isPlaying ? 'playing' : ''}`} 
-          tooltipText={isPlaying ? t('animation.pause') : t('animation.play')}
+          tooltipText={`${isPlaying ? t('animation.pause') : t('animation.play')} (Space)`}
           tooltipClassName="tooltip-primary"
         >
-          {isPlaying ? '⏸' : '▶️'}
+          <span className="control-icon">{isPlaying ? '⏸' : '▶'}</span>
         </ButtonWithTooltip>
         
         <ButtonWithTooltip 
           onClick={onStepForward} 
           className="control-button" 
-          tooltipText={t('animation.stepForward')}
+          tooltipText={`${t('animation.stepForward')} (→)`}
           tooltipClassName="tooltip-primary"
           disabled={currentStep === totalSteps - 1}
         >
-          ⏩
+          <span className="control-icon">▶</span>
         </ButtonWithTooltip>
         
         <ButtonWithTooltip 
           onClick={onJumpToEnd} 
           className="control-button" 
-          tooltipText={t('animation.jumpToEnd')}
+          tooltipText={`${t('animation.jumpToEnd')} (End)`}
           tooltipClassName="tooltip-primary"
           disabled={currentStep === totalSteps - 1}
         >
-          ⏭
+          <span className="control-icon">⏭</span>
         </ButtonWithTooltip>
         
         <ButtonWithTooltip 
           onClick={onReset} 
           className="control-button reset-button" 
-          tooltipText={t('animation.reset')}
+          tooltipText={`${t('animation.reset')} (R)`}
           tooltipClassName="tooltip-primary"
         >
-          🔄
+          <span className="control-icon">↻</span>
         </ButtonWithTooltip>
       </div>
       

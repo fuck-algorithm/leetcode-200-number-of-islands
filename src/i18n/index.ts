@@ -21,7 +21,15 @@ i18n
       }
     },
     fallbackLng: 'zh',
-    lng: savedLanguage || 'zh', // 使用保存的语言或默认中文
+    // 不手动设置lng，以允许LanguageDetector发挥作用
+    // lng: savedLanguage || 'zh', 
+    detection: {
+      // 检测语言的顺序: localStorage > navigator > htmlTag
+      order: ['localStorage', 'navigator', 'htmlTag'],
+      lookupLocalStorage: 'language',
+      caches: ['localStorage']
+    },
+    supportedLngs: ['en', 'zh'],
     interpolation: {
       escapeValue: false
     }

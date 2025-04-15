@@ -1,0 +1,111 @@
+/* 标题区域包装容器 */
+.title-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* 标题面板的主容器 */
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
+  height: 30px;
+  margin: 0;
+  position: relative; /* 确保子元素的绝对定位相对于此容器 */
+}
+
+/* 主标题 */
+.main-title {
+  font-size: 1rem;
+  margin: 0;
+  text-align: center;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* 右侧GitHub链接容器 */
+.title-right {
+  display: flex;
+  align-items: center;
+  margin-left: 0.3rem;
+}
+
+/* 右上角语言选择器容器 */
+.language-selector-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 5;
+  transform: scale(0.9);
+}
+
+/* 标题链接样式 */
+.title-link {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  transition: transform 0.2s ease;
+  padding: 0.05rem 0;
+  margin: 0;
+}
+
+.title-link:hover {
+  transform: translateY(-1px);
+}
+
+.title-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #3498db;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.title-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.title-link:hover::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 8px;
+  background-color: rgba(52, 152, 219, 0.9);
+  color: white;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+
+/* 修改返回列表链接的位置和样式 */
+.back-to-list {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2px 6px;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+} 

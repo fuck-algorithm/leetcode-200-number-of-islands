@@ -10,7 +10,7 @@ import CustomGridProcessor from './components/CustomGridProcessor'
 import AnimationController from './components/AnimationController'
 import AlgorithmCalculator from './components/AlgorithmCalculator'
 import LanguageSelector from './components/LanguageSelector'
-import GitHubLink from './components/GitHubLink'
+import TitlePanel from './components/TitlePanel'
 
 // 生成指定范围内的随机整数
 const getRandomInt = (min: number, max: number): number => {
@@ -351,12 +351,14 @@ function App() {
 
   return (
     <div className="app-container">
-      <LanguageSelector />
       <div className="top-section">
-        <div className="title-container">
-          <h1>{t('appTitle')}</h1>
-          <GitHubLink repo="cc11001100/fuck-algorithm/tree/master/leetcode-200-number-of-islands" />
-        </div>
+        <TitlePanel 
+          repoUrl="fuck-algorithm/leetcode-200-number-of-islands" 
+          backLink={{
+            url: "https://fuck-algorithm.github.io/leetcode-hot-100/",
+            text: "LeetCode Hot 100"
+          }}
+        />
       </div>
       
       <div className="bottom-section" ref={mainContentRef}>
