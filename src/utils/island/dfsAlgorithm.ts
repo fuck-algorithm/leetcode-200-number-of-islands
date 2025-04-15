@@ -1,5 +1,6 @@
 import { CellState, AnimationStep, Position, DIRECTIONS, Grid } from './types';
 import { cloneGrid } from './gridUtils';
+import { getI18nMessage } from './i18nHelper';
 
 /**
  * DFS算法相关实现
@@ -26,7 +27,7 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
   steps.push({
     grid: cloneGrid(grid),
     islandCount: 0,
-    message: '初始状态：绿色表示陆地(1)，白色表示水域(0)。'
+    message: getI18nMessage('algorithmSteps.initialState')
   });
   
   // 深度优先搜索函数 - 使用显式栈实现，而不是递归
@@ -43,7 +44,7 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
       grid: cloneGrid(grid),
       currentPosition: [startI, startJ],
       islandCount: count,
-      message: `发现陆地 (${startI},${startJ})，开始搜索新岛屿。将其加入栈。`,
+      message: getI18nMessage('algorithmSteps.foundLand', { row: startI, col: startJ }),
       stack: [...stack]
     });
     
@@ -58,7 +59,7 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
         grid: cloneGrid(grid),
         currentPosition: [i, j],
         islandCount: count,
-        message: `当前正在访问单元格 (${i},${j})。`,
+        message: getI18nMessage('algorithmSteps.visitingCell', { row: i, col: j }),
         stack: [...stack]
       });
       
@@ -84,7 +85,13 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
             currentPosition: [i, j],
             exploringDirection: name,
             islandCount: count,
-            message: `从 (${i},${j}) 向${name}方向探索，发现陆地 (${ni},${nj})。将其加入栈。`,
+            message: getI18nMessage('algorithmSteps.exploreDirection', { 
+              row: i, 
+              col: j, 
+              direction: name,
+              newRow: ni,
+              newCol: nj
+            }),
             stack: [...stack]
           });
           
@@ -97,7 +104,7 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
             grid: cloneGrid(grid),
             currentPosition: [i, j],
             islandCount: count,
-            message: `将 (${ni},${nj}) 加入栈。`,
+            message: getI18nMessage('algorithmSteps.addedToStack', { row: ni, col: nj }),
             stack: [...stack]
           });
           
@@ -115,14 +122,15 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
             grid: cloneGrid(grid),
             currentPosition: [i, j],
             islandCount: count,
-            message: `单元格 (${i},${j}) 的所有邻居都已访问，将其从栈中弹出。返回到 (${next.i},${next.j})。`,
+            message: getI18nMessage('algorithmSteps.visitedPopStack', { row: i, col: j }) +
+              ' ' + getI18nMessage('algorithmSteps.returnToPosition', { row: next.i, col: next.j }),
             stack: [...stack]
           });
         } else {
           steps.push({
             grid: cloneGrid(grid),
             islandCount: count,
-            message: `单元格 (${i},${j}) 的所有邻居都已访问，将其从栈中弹出。栈为空，岛屿搜索完成。`,
+            message: getI18nMessage('algorithmSteps.emptyStackComplete', { row: i, col: j }),
             stack: []
           });
         }
@@ -140,8 +148,8 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
           currentPosition: [i, j],
           islandCount: count,
           message: grid[i][j] === CellState.WATER ? 
-            `检查位置 (${i},${j}) - 水域，继续搜索。` : 
-            `检查位置 (${i},${j}) - 已访问过的区域，继续搜索。`
+            getI18nMessage('algorithmSteps.checkPositionWater', { row: i, col: j }) : 
+            getI18nMessage('algorithmSteps.checkPositionVisited', { row: i, col: j }),
         });
         continue;
       }
@@ -155,7 +163,7 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
           grid: cloneGrid(grid),
           currentPosition: [i, j],
           islandCount: count,
-          message: `发现第 ${count} 个岛屿，从 (${i},${j}) 开始搜索。`,
+          message: getI18nMessage('algorithmSteps.foundNewIsland', { count, row: i, col: j }),
           stack: []
         });
         
@@ -169,7 +177,7 @@ export const numIslandsWithAnimation = (originalGrid: Grid): AnimationStep[] => 
   steps.push({
     grid: cloneGrid(grid),
     islandCount: count,
-    message: `算法完成！共发现 ${count} 个岛屿。`
+    message: getI18nMessage('algorithmSteps.algorithmComplete', { count })
   });
   
   return steps;

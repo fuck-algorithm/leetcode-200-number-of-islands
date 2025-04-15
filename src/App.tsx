@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import './App.css'
 import AnimationControls from './components/AnimationControls'
 import ControlPanel from './components/ControlPanel'
@@ -8,6 +9,8 @@ import GridGenerator from './components/GridGenerator'
 import CustomGridProcessor from './components/CustomGridProcessor'
 import AnimationController from './components/AnimationController'
 import AlgorithmCalculator from './components/AlgorithmCalculator'
+import LanguageSelector from './components/LanguageSelector'
+import GitHubLink from './components/GitHubLink'
 
 // 生成指定范围内的随机整数
 const getRandomInt = (min: number, max: number): number => {
@@ -15,6 +18,7 @@ const getRandomInt = (min: number, max: number): number => {
 }
 
 function App() {
+  const { t } = useTranslation();
   // 生成5到20之间的随机值作为初始行列数
   const initialSize = getRandomInt(5, 20);
   const [rows, setRows] = useState<number>(initialSize)
@@ -340,92 +344,65 @@ function App() {
     }
   }
 
+  // 使用document.title更新标题，根据当前语言
+  useEffect(() => {
+    document.title = t('appTitle');
+  }, [t]);
+
   return (
     <div className="app-container">
+      <LanguageSelector />
       <div className="top-section">
         <div className="title-container">
-          <a 
-            href="https://leetcode.com/problems/number-of-islands/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="title-link"
-          >
-            <h1>LeetCode 200 - 岛屿数量可视化计算器</h1>
-          </a>
-          <a 
-            href="https://github.com/fuck-algorithm/leetcode-200-number-of-islands" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="github-link" 
-            title="在GitHub上查看源代码"
-          >
-            <svg className="github-icon" viewBox="0 0 16 16" width="24" height="24" fill="currentColor">
-              <path fillRule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-            </svg>
-          </a>
-        </div>
-        <p className="description">给你一个由 '1'（陆地）和 '0'（水）组成的二维网格，请你计算网格中岛屿的数量。岛屿由相邻的陆地连接而成，可以假设网格的四个边均被水包围。</p>
-      </div>
-      
-      {/* 返回列表页链接 */}
-      <a 
-        href="https://fuck-algorithm.github.io/leetcode-hot-100/" 
-        className="back-to-list" 
-        title="返回 LeetCode Hot 100 列表"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span className="back-arrow">←</span>
-        <span className="back-text">返回列表</span>
-      </a>
-      
-      <div ref={mainContentRef} className="main-content">
-        <div className="bottom-section">
-          <div className="left-column">
-            <ControlPanel
-              rows={rows}
-              cols={cols}
-              landProbability={landProbability}
-              onRowsChange={setRowsSafe}
-              onColsChange={setColsSafe}
-              onLandProbabilityChange={setLandProbability}
-              onGenerateRandomGrid={generateRandomGrid}
-              onExample1={example1}
-              onExample2={example2}
-              algorithm={algorithm}
-              onAlgorithmChange={handleAlgorithmChange}
-              customGridInput={customGridInput}
-              onCustomGridInputChange={setCustomGridInput}
-              onCustomGridSubmit={handleCustomGridSubmit}
-              islandCount={islandCount}
-            />
-          </div>
-          
-          <div className="right-column">
-            <GridVisualizer
-              grid={grid}
-              animationSteps={animationSteps}
-              currentStep={currentStep}
-              algorithm={algorithm}
-              message={message}
-            />
-          </div>
+          <h1>{t('appTitle')}</h1>
+          <GitHubLink repo="cc11001100/fuck-algorithm/tree/master/leetcode-200-number-of-islands" />
         </div>
       </div>
       
-      {/* 全宽进度条控制区域 */}
-      <AnimationControls 
+      <div className="bottom-section" ref={mainContentRef}>
+        <div className="left-column">
+          <ControlPanel
+            rows={rows}
+            cols={cols}
+            landProbability={landProbability}
+            algorithm={algorithm}
+            onRowsChange={setRowsSafe}
+            onColsChange={setColsSafe}
+            onLandProbabilityChange={setLandProbability}
+            onAlgorithmChange={handleAlgorithmChange}
+            onGenerateRandomGrid={generateRandomGrid}
+            onExample1={example1}
+            onExample2={example2}
+            customGridInput={customGridInput}
+            onCustomGridInputChange={setCustomGridInput}
+            onCustomGridSubmit={handleCustomGridSubmit}
+            islandCount={islandCount}
+          />
+        </div>
+        
+        <div className="right-column">
+          <GridVisualizer 
+            grid={grid} 
+            animationSteps={animationSteps} 
+            currentStep={currentStep}
+            algorithm={algorithm}
+            message={message}
+          />
+        </div>
+      </div>
+      
+      <AnimationControls
         isPlaying={isPlaying}
+        currentStep={currentStep}
+        totalSteps={animationSteps.length}
         onPlayPause={togglePlayPause}
         onStepForward={stepForward}
         onStepBackward={stepBackward}
         onReset={resetAnimation}
         onJumpToStart={jumpToStart}
         onJumpToEnd={jumpToEnd}
-        onSpeedChange={setAnimationSpeed}
         currentSpeed={animationSpeed}
-        currentStep={currentStep}
-        totalSteps={animationSteps.length}
+        onSpeedChange={setAnimationSpeed}
         onSliderChange={setCurrentStep}
       />
     </div>

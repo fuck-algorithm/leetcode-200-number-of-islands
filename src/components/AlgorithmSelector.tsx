@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './ControlPanel.css';
 
 interface AlgorithmSelectorProps {
@@ -10,10 +11,12 @@ const AlgorithmSelector: React.FC<AlgorithmSelectorProps> = ({
   algorithm,
   onAlgorithmChange
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="algorithm-selector compact-selector">
       <div className="algorithm-header">
-        <span className="algo-label">算法:</span>
+        <span className="algo-label">{t('controls.algorithm')}</span>
         <div className="radio-options">
           <label className={`tiny-radio ${algorithm === 'dfs' ? 'selected' : ''}`}>
             <input
@@ -23,7 +26,7 @@ const AlgorithmSelector: React.FC<AlgorithmSelectorProps> = ({
               onChange={() => onAlgorithmChange('dfs')}
             />
             <span className="radio-dot"></span>
-            <span className="algo-name">深度优先 (DFS)</span>
+            <span className="algo-name">{t('controls.dfs')}</span>
           </label>
           
           <label className={`tiny-radio ${algorithm === 'bfs' ? 'selected' : ''}`}>
@@ -34,7 +37,7 @@ const AlgorithmSelector: React.FC<AlgorithmSelectorProps> = ({
               onChange={() => onAlgorithmChange('bfs')}
             />
             <span className="radio-dot"></span>
-            <span className="algo-name">广度优先 (BFS)</span>
+            <span className="algo-name">{t('controls.bfs')}</span>
           </label>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { CellState, AnimationStep, Position, DIRECTIONS, Grid } from './types';
 import { cloneGrid } from './gridUtils';
+import { getI18nMessage } from './i18nHelper';
 
 /**
  * BFS算法相关实现
@@ -26,7 +27,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
   steps.push({
     grid: cloneGrid(grid),
     islandCount: 0,
-    message: '初始状态：绿色表示陆地(1)，白色表示水域(0)。'
+    message: getI18nMessage('algorithmSteps.initialState')
   });
   
   // 广度优先搜索函数 - 使用队列实现
@@ -43,7 +44,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
       grid: cloneGrid(grid),
       currentPosition: [startI, startJ],
       islandCount: count,
-      message: `发现陆地 (${startI},${startJ})，开始搜索新岛屿。将其加入队列。`,
+      message: getI18nMessage('algorithmSteps.foundLand', { row: startI, col: startJ }),
       queue: [...queue] // 确保是队列的深拷贝
     });
     
@@ -58,7 +59,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
           grid: cloneGrid(grid),
           currentPosition: [i, j],
           islandCount: count,
-          message: `单元格 (${i},${j}) 已被访问过，跳过。`,
+          message: getI18nMessage('algorithmSteps.cellAlreadyVisited', { row: i, col: j }),
           queue: [...queue]
         });
         continue;
@@ -72,7 +73,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
         grid: cloneGrid(grid),
         currentPosition: [i, j],
         islandCount: count,
-        message: `当前正在访问单元格 (${i},${j})。`,
+        message: getI18nMessage('algorithmSteps.visitingCell', { row: i, col: j }),
         queue: [...queue] // 记录更新后的队列状态
       });
       
@@ -105,7 +106,13 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
           currentPosition: [i, j],
           exploringDirection: name,
           islandCount: count,
-          message: `从 (${i},${j}) 向${name}方向探索，发现陆地 (${ni},${nj})。将其加入队列。`,
+          message: getI18nMessage('algorithmSteps.exploreDirection', {
+            row: i,
+            col: j,
+            direction: name,
+            newRow: ni,
+            newCol: nj
+          }),
           queue: [...queue] // 记录当前队列状态
         });
         
@@ -117,7 +124,11 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
           grid: cloneGrid(grid),
           currentPosition: [i, j],
           islandCount: count,
-          message: `将 (${ni},${nj}) 加入队列。队列现有 ${queue.length} 个元素。`,
+          message: getI18nMessage('algorithmSteps.addedToQueue', { 
+            row: ni, 
+            col: nj, 
+            count: queue.length 
+          }),
           queue: [...queue] // 确保是队列的深拷贝
         });
       }
@@ -127,7 +138,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
     steps.push({
       grid: cloneGrid(grid),
       islandCount: count,
-      message: `队列为空，当前岛屿搜索完成。`,
+      message: getI18nMessage('algorithmSteps.emptyQueueComplete'),
       queue: [] // 确保明确设置为空队列
     });
   };
@@ -142,8 +153,8 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
           currentPosition: [i, j],
           islandCount: count,
           message: grid[i][j] === CellState.WATER ? 
-            `检查位置 (${i},${j})，是水域，继续扫描。` : 
-            `检查位置 (${i},${j})，已访问过，继续扫描。`
+            getI18nMessage('algorithmSteps.checkPositionWater', { row: i, col: j }) : 
+            getI18nMessage('algorithmSteps.checkPositionVisited', { row: i, col: j })
         });
         continue;
       }
@@ -152,7 +163,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
         grid: cloneGrid(grid),
         currentPosition: [i, j],
         islandCount: count,
-        message: `检查位置 (${i},${j})，发现未访问的陆地，开始BFS搜索。`
+        message: getI18nMessage('algorithmSteps.foundUnvisitedLand', { row: i, col: j })
       });
       
       // 发现一个新岛屿
@@ -165,7 +176,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
       steps.push({
         grid: cloneGrid(grid),
         islandCount: count,
-        message: `完成一个岛屿的搜索，当前岛屿数量: ${count}。`
+        message: getI18nMessage('algorithmSteps.islandSearchComplete', { count })
       });
     }
   }
@@ -174,7 +185,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
   steps.push({
     grid: cloneGrid(grid),
     islandCount: count,
-    message: `搜索完成，总共发现 ${count} 个岛屿。`
+    message: getI18nMessage('algorithmSteps.algorithmComplete', { count })
   });
   
   return steps;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './ControlPanel.css';
 
 interface GridControlsProps {
@@ -24,6 +25,8 @@ const GridControls: React.FC<GridControlsProps> = ({
   onExample1,
   onExample2
 }) => {
+  const { t } = useTranslation();
+
   // 生成指定范围内的随机整数
   const getRandomInt = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -45,7 +48,7 @@ const GridControls: React.FC<GridControlsProps> = ({
       <div className="control-group size-control-group">
         <div className="size-controls-row">
           <div className="compact-size-inputs">
-            <span>行:</span>
+            <span>{t('controls.rows')}</span>
             <input
               type="number"
               min="2"
@@ -56,7 +59,7 @@ const GridControls: React.FC<GridControlsProps> = ({
                 onRowsChange(newRows);
               }}
             />
-            <span>列:</span>
+            <span>{t('controls.cols')}</span>
             <input
               type="number"
               min="2"
@@ -69,7 +72,7 @@ const GridControls: React.FC<GridControlsProps> = ({
             />
             <button 
               className="dice-button" 
-              title="随机生成大小并绘制网格" 
+              title={t('controls.generateRandom')} 
               onClick={generateRandomSize}
             >
               🎲
@@ -80,7 +83,7 @@ const GridControls: React.FC<GridControlsProps> = ({
       
       <div className="control-group">
         <div className="probability-label">
-          陆地概率: {(landProbability * 100).toFixed(1)}%
+          {t('controls.landProbability')} {(landProbability * 100).toFixed(1)}%
         </div>
         <div className="probability-slider-container">
           <input
@@ -100,9 +103,9 @@ const GridControls: React.FC<GridControlsProps> = ({
       </div>
       
       <div className="control-group">
-        <button onClick={onGenerateRandomGrid}>网格生成随机数据</button>
-        <button onClick={onExample1}>示例1</button>
-        <button onClick={onExample2}>示例2</button>
+        <button onClick={onGenerateRandomGrid}>{t('controls.generateRandom')}</button>
+        <button onClick={onExample1}>{t('controls.example1')}</button>
+        <button onClick={onExample2}>{t('controls.example2')}</button>
       </div>
     </div>
   );

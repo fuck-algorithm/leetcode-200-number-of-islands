@@ -1,4 +1,5 @@
 import { Grid, CellState } from '../utils/island';
+import i18next from 'i18next';
 
 export interface CustomGridProcessorProps {
   customGridInput: string;
@@ -37,25 +38,25 @@ export const CustomGridProcessor = {
       
       // 验证网格是否有效
       if (customGrid.length === 0) {
-        setMessage('输入的网格数据无效，请检查格式');
+        setMessage(i18next.t('errors.invalidGridData'));
         return false;
       }
       
       // 检查每行长度是否一致
       const firstRowLength = customGrid[0].length;
       if (customGrid.some(row => row.length !== firstRowLength)) {
-        setMessage('输入的网格数据行长度不一致，请检查格式');
+        setMessage(i18next.t('errors.inconsistentRowLength'));
         return false;
       }
       
       // 验证网格尺寸不超过最大限制
       if (customGrid.length > 50) {
-        setMessage('网格行数不能超过50行');
+        setMessage(i18next.t('errors.maxRowsExceeded'));
         return false;
       }
       
       if (firstRowLength > 50) {
-        setMessage('网格列数不能超过50列');
+        setMessage(i18next.t('errors.maxColsExceeded'));
         return false;
       }
       
@@ -68,7 +69,7 @@ export const CustomGridProcessor = {
       
       return true;
     } catch (error) {
-      setMessage('解析输入数据时出错，请检查格式');
+      setMessage(i18next.t('errors.parseError'));
       return false;
     }
   }

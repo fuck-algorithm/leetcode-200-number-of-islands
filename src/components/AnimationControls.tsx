@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import './AnimationControls.css';
 
@@ -121,6 +122,7 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
   totalSteps,
   onSliderChange
 }) => {
+  const { t } = useTranslation();
   const progressContainerRef = useRef<HTMLDivElement>(null);
   const speedSelectRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -276,13 +278,11 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
 
   return (
     <div className="animation-controls-footer">
-      
-      
       <div className="control-buttons">
         <ButtonWithTooltip 
           onClick={onJumpToStart} 
           className="control-button" 
-          tooltipText="跳到开始 (快捷键: Home) - 跳转到动画的第一步"
+          tooltipText={t('animation.jumpToStart')}
           tooltipClassName="tooltip-primary"
           disabled={currentStep === 0}
         >
@@ -292,36 +292,36 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
         <ButtonWithTooltip 
           onClick={onStepBackward} 
           className="control-button" 
-          tooltipText="上一步 (快捷键: ←左方向键) - 回到前一步动画"
+          tooltipText={t('animation.stepBackward')}
           tooltipClassName="tooltip-primary"
           disabled={currentStep === 0}
         >
-          <span>←</span>
+          ⏪
         </ButtonWithTooltip>
         
         <ButtonWithTooltip 
           onClick={onPlayPause} 
           className={`control-button play-button ${isPlaying ? 'playing' : ''}`} 
-          tooltipText={isPlaying ? "暂停 (快捷键: 空格键) - 暂停自动播放" : "播放 (快捷键: 空格键) - 开始自动播放动画"}
+          tooltipText={isPlaying ? t('animation.pause') : t('animation.play')}
           tooltipClassName="tooltip-primary"
         >
-          {isPlaying ? '⏸' : '▶'}
+          {isPlaying ? '⏸' : '▶️'}
         </ButtonWithTooltip>
         
         <ButtonWithTooltip 
           onClick={onStepForward} 
           className="control-button" 
-          tooltipText="下一步 (快捷键: →右方向键) - 前进到下一步动画"
+          tooltipText={t('animation.stepForward')}
           tooltipClassName="tooltip-primary"
           disabled={currentStep === totalSteps - 1}
         >
-          <span>→</span>
+          ⏩
         </ButtonWithTooltip>
         
         <ButtonWithTooltip 
           onClick={onJumpToEnd} 
           className="control-button" 
-          tooltipText="跳到结束 (快捷键: End) - 跳转到动画的最后一步"
+          tooltipText={t('animation.jumpToEnd')}
           tooltipClassName="tooltip-primary"
           disabled={currentStep === totalSteps - 1}
         >
@@ -331,10 +331,10 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
         <ButtonWithTooltip 
           onClick={onReset} 
           className="control-button reset-button" 
-          tooltipText="重置 (快捷键: R键) - 将动画重置到第一步"
-          tooltipClassName="tooltip-danger"
+          tooltipText={t('animation.reset')}
+          tooltipClassName="tooltip-primary"
         >
-          R
+          🔄
         </ButtonWithTooltip>
       </div>
       
@@ -353,7 +353,7 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
         >
           {currentStep + 1} / {totalSteps || 1}
           {showStepInfoTooltip && <Tooltip 
-            text="当前步数 / 总步数" 
+            text={t('animation.stepInfo')} 
             className="tooltip-primary"
             style={{
               top: `${tooltipPosition.top}px`,
@@ -389,7 +389,7 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
           ></div>
           
           {showProgressTooltip && <Tooltip 
-            text="拖动滑块以跳转到特定步骤" 
+            text={t('animation.progressTooltip')} 
             className="tooltip-primary"
             style={{
               top: `${tooltipPosition.top}px`,
@@ -411,9 +411,9 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
             }}
             onMouseLeave={() => setShowSpeedTooltip(false)}
           >
-            速度:
+            {t('animation.speed')}
             {showSpeedTooltip && <Tooltip 
-              text="调整动画播放速度" 
+              text={t('animation.speedTooltip')} 
               className="tooltip-primary"
               style={{
                 top: `${tooltipPosition.top}px`,
@@ -440,7 +440,7 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
               {getCurrentSpeedLabel()}
               <span className="custom-select-arrow"></span>
               {showSpeedSelectTooltip && <Tooltip 
-                text="点击选择播放速度" 
+                text={t('animation.speedSelectTooltip')} 
                 className="tooltip-primary"
                 style={{
                   top: `${tooltipPosition.top}px`,

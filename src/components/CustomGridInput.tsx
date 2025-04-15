@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './CustomGridInput.css';
 
 interface CustomGridInputProps {
@@ -12,23 +13,21 @@ const CustomGridInput: React.FC<CustomGridInputProps> = ({
   onChange,
   onSubmit
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="control-group custom-grid-container">
       <label className="custom-grid-label">
-        自定义网格(1表示陆地，0表示水):
+        {t('controls.customGrid')}
         <textarea
           className="custom-grid-input"
           rows={5}
-          placeholder="例如:
-10010
-11000
-00100
-00011"
+          placeholder={t('controls.customGridPlaceholder')}
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
       </label>
-      <button onClick={onSubmit}>应用自定义网格</button>
+      <button onClick={onSubmit}>{t('controls.submit')}</button>
     </div>
   );
 };

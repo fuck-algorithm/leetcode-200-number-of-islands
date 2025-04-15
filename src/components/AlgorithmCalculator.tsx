@@ -4,6 +4,8 @@ import {
   numIslandsWithAnimation, 
   numIslandsWithAnimationBFS 
 } from '../utils/island';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 export interface AlgorithmCalculatorProps {
   grid: Grid;
@@ -36,7 +38,7 @@ const AlgorithmCalculator = {
     setIslandCount(count);
     setAnimationSteps(steps);
     setCurrentStep(0);
-    setMessage('开始遍历网格寻找岛屿...');
+    setMessage(i18next.t('animation.startingSearch'));
     
     return { count, steps };
   }

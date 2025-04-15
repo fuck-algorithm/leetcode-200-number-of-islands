@@ -13,6 +13,9 @@ export * from './gridUtils';
 export * from './dfsAlgorithm';
 export * from './bfsAlgorithm';
 
+// 导出i18n工具函数
+export * from './i18nHelper';
+
 // 为了兼容现有代码，提供原始的numIslands函数
 import { numIslandsDFS } from './dfsAlgorithm';
 export const numIslands = numIslandsDFS; 

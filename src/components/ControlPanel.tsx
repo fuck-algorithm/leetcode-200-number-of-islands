@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './ControlPanel.css';
 import GridControls from './GridControls';
 import AlgorithmSelector from './AlgorithmSelector';
@@ -41,8 +42,10 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   onCustomGridInputChange,
   onCustomGridSubmit
 }) => {
+  const { t } = useTranslation();
+
   return (
-    <div className="left-column">
+    <>
       <div className="controls">
         <GridControls 
           rows={rows}
@@ -71,7 +74,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
       </div>
       
       <Legend />
-    </div>
+    </>
   );
 };
 

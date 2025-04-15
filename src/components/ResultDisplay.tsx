@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './ControlPanel.css';
 
 interface ResultDisplayProps {
@@ -6,13 +7,15 @@ interface ResultDisplayProps {
 }
 
 const ResultDisplay: React.FC<ResultDisplayProps> = ({ islandCount }) => {
+  const { t } = useTranslation();
+  
   if (islandCount === null) {
     return null;
   }
   
   return (
     <div className="result">
-      岛屿数量: <span className="count">{islandCount}</span>
+      {t('results.islands', { count: islandCount })}
     </div>
   );
 };

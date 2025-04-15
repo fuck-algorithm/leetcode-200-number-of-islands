@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './GridVisualizer.css';
 import { Grid, AnimationStep } from '../utils/island';
 import IslandGrid from './IslandGrid';
@@ -20,6 +21,8 @@ const GridVisualizer: React.FC<GridVisualizerProps> = ({
   algorithm,
   message
 }) => {
+  const { t } = useTranslation();
+
   // 获取当前显示的网格
   const getCurrentDisplayGrid = (): Grid => {
     if (animationSteps.length > 0 && currentStep < animationSteps.length) {
@@ -53,7 +56,7 @@ const GridVisualizer: React.FC<GridVisualizerProps> = ({
       {/* 消息框，显示在网格上方 */}
       {animationSteps.length > 0 && currentStep < animationSteps.length && (
         <div className="message-box top-message">
-          {message || '点击"网格生成随机数据"按钮开始演示算法过程'}
+          {t('results.message', { message: message || '点击"网格生成随机数据"按钮开始演示算法过程' })}
         </div>
       )}
       <div className="grid-with-ds-container">

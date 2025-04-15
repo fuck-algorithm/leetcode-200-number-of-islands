@@ -1,5 +1,6 @@
 import { AnimationStep } from '../utils/island';
 import { MutableRefObject } from 'react';
+import i18next from 'i18next';
 
 export interface AnimationControllerProps {
   animationSteps: AnimationStep[];
@@ -70,6 +71,7 @@ const AnimationController = {
   // 更新消息
   updateMessage: (props: AnimationControllerProps) => {
     const { animationSteps, currentStep, setMessage } = props;
+    const t = i18next.t.bind(i18next);
     
     if (animationSteps.length === 0 || currentStep >= animationSteps.length) return;
     
@@ -80,28 +82,28 @@ const AnimationController = {
     
     if (step.currentPosition) {
       const [row, col] = step.currentPosition;
-      newMessage = `检查位置 (${row}, ${col})`;
+      newMessage = t('animation.checkingPosition', { row, col });
       
       if (step.grid[row][col] === '0') {
-        newMessage += ' - 水域，继续搜索';
+        newMessage += t('animation.isWater');
       } else if (step.grid[row][col] === '1') {
-        newMessage += ' - 发现新陆地，开始探索新岛屿';
+        newMessage += t('animation.isNewLand');
       } else if (step.grid[row][col].startsWith('V')) {
-        newMessage += ' - 已访问过的陆地，继续搜索';
+        newMessage += t('animation.isVisitedLand');
       }
     } else if (step.islandCount > 0) {
-      newMessage = `已发现 ${step.islandCount} 个岛屿`;
+      newMessage = t('animation.islandsFound', { count: step.islandCount });
       if (currentStep === animationSteps.length - 1) {
-        newMessage += ' - 搜索完成！';
+        newMessage += t('animation.searchComplete');
       }
     } else {
-      newMessage = '开始遍历网格寻找岛屿...';
+      newMessage = t('animation.startingSearch');
     }
     
     // 添加探索方向的信息
     if (step.exploringDirection) {
       let direction = step.exploringDirection;
-      newMessage += ` - 向${direction}探索`;
+      newMessage += t('animation.exploring', { direction });
     }
     
     setMessage(newMessage);
