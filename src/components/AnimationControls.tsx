@@ -193,13 +193,13 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
         <button 
           onClick={onJumpToStart} 
           className="control-button" 
-          title="跳到开始 (快捷键: Home) - 跳转到动画的第一步"
+          data-tooltip="跳到开始 (快捷键: Home) - 跳转到动画的第一步"
           disabled={currentStep === 0}
         >⏮</button>
         <button 
           onClick={onStepBackward} 
           className="control-button" 
-          title="上一步 (快捷键: ←左方向键) - 回到前一步动画"
+          data-tooltip="上一步 (快捷键: ←左方向键) - 回到前一步动画"
           disabled={currentStep === 0}
         >
           <span>←</span>
@@ -207,14 +207,14 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
         <button 
           onClick={onPlayPause} 
           className={`control-button play-button ${isPlaying ? 'playing' : ''}`} 
-          title={isPlaying ? "暂停 (快捷键: 空格键) - 暂停自动播放" : "播放 (快捷键: 空格键) - 开始自动播放动画"}
+          data-tooltip={isPlaying ? "暂停 (快捷键: 空格键) - 暂停自动播放" : "播放 (快捷键: 空格键) - 开始自动播放动画"}
         >
           {isPlaying ? '⏸' : '▶'}
         </button>
         <button 
           onClick={onStepForward} 
           className="control-button" 
-          title="下一步 (快捷键: →右方向键) - 前进到下一步动画"
+          data-tooltip="下一步 (快捷键: →右方向键) - 前进到下一步动画"
           disabled={currentStep === totalSteps - 1}
         >
           <span>→</span>
@@ -222,18 +222,18 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
         <button 
           onClick={onJumpToEnd} 
           className="control-button" 
-          title="跳到结束 (快捷键: End) - 跳转到动画的最后一步"
+          data-tooltip="跳到结束 (快捷键: End) - 跳转到动画的最后一步"
           disabled={currentStep === totalSteps - 1}
         >⏭</button>
         <button 
           onClick={onReset} 
           className="control-button reset-button" 
-          title="重置 (快捷键: R键) - 将动画重置到初始状态，清除所有动画步骤"
+          data-tooltip="重置 (快捷键: R键) - 将动画重置到初始状态，清除所有动画步骤"
         >R</button>
       </div>
       
       <div className="animation-progress">
-        <div className="step-info" title="当前步数 / 总步数">
+        <div className="step-info" data-tooltip="当前步数 / 总步数">
           {currentStep + 1} / {totalSteps || 1}
         </div>
         
@@ -242,7 +242,7 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
           className={`progress-container ${isDragging ? 'dragging' : ''}`}
           onClick={handleProgressClick}
           onMouseDown={handleMouseDown}
-          title="动画进度条 - 拖动以跳转到特定步骤"
+          data-tooltip="动画进度条 - 拖动以跳转到特定步骤"
         >
           <div 
             className={`progress-fill ${showPulse ? 'pulse-effect' : ''}`}
@@ -256,12 +256,12 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
         </div>
         
         <div className="speed-control" ref={speedSelectRef}>
-          <span title="设置动画播放速度">速度:</span>
+          <span data-tooltip="设置动画播放速度">速度:</span>
           <div className="custom-select-container">
             <div 
               className="custom-select-trigger" 
               onClick={toggleSpeedMenu}
-              title="点击更改动画播放速度"
+              data-tooltip="点击更改动画播放速度"
             >
               {getCurrentSpeedLabel()}
               <span className="custom-select-arrow"></span>
