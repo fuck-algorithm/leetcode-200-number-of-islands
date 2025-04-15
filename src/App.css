@@ -1,0 +1,716 @@
+/* 基础样式重置 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --highlight-color: #e74c3c;
+  --text-color: #2c3e50;
+  --light-bg: #ecf0f1;
+  --dark-bg: #34495e;
+  --border-color: #bdc3c7;
+  --hover-color: #2980b9;
+  --panel-bg: #f8f9fa;
+  
+  /* 新增颜色变量 */
+  --water-color: #ecf0f1;
+  --land-color: #2ecc71;
+  --visited-color: #7f8c8d;
+  --current-color: #f39c12;
+  --exploring-color: #9b59b6;
+  
+  /* 数据结构颜色 */
+  --stack-bg: #f5f5f5;
+  --stack-item: #e3f2fd;
+  --stack-top: #bbdefb;
+  --queue-bg: #f5f5f5;
+  --queue-item: #e8f5e9;
+  --queue-front: #c8e6c9;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.4;
+  color: var(--text-color);
+  background-color: #f0f2f5;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0.8rem;
+  overflow: hidden;
+  padding-bottom: 1rem;
+}
+
+h1 {
+  margin-bottom: 0.25rem;
+  color: var(--dark-bg);
+  font-size: min(2.2vw, 1.8rem);
+  text-align: center;
+}
+
+.description {
+  margin-bottom: 0.5rem;
+  font-size: min(1.5vw, 0.9rem);
+  color: #7f8c8d;
+  text-align: center;
+}
+
+/* 主要内容区域 */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* 上下两部分 */
+.top-section {
+  flex: 0 0 auto;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-section {
+  flex: 1;
+  display: flex;
+  gap: 0.8rem;
+  overflow: visible;
+  min-height: 0;
+  position: relative;
+}
+
+/* 左右两栏 */
+.left-column {
+  flex: 0 0 250px;
+  padding: 0.8rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  height: auto;
+  min-height: min-content;
+  overflow: visible;
+  position: relative;
+  z-index: 10;
+}
+
+.right-column {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow-y: visible; /* 改为visible允许内容自然扩展 */
+  max-height: none; /* 移除高度限制 */
+}
+
+/* 网格控制区样式 */
+.grid-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* 控制组样式 */
+.control-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.3rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.4rem;
+}
+
+.control-group:last-child {
+  border-bottom: none;
+}
+
+/* 输入和按钮样式 */
+label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  margin-right: 0.4rem;
+}
+
+input[type="number"] {
+  width: 40px;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+}
+
+input[type="range"] {
+  flex: 1;
+}
+
+button {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 结果显示样式 */
+.result {
+  text-align: center;
+  font-weight: bold;
+  background-color: #f5f5f5;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.count {
+  color: #e74c3c;
+}
+
+/* 网格容器样式 */
+.grid-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.island-grid-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.visualization-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.grid-with-ds-container {
+  display: flex;
+  flex: 1;
+}
+
+svg {
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 动画控制器样式 */
+.animation-container {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 0.6rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.message-box {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  min-height: 40px;
+  max-height: 60px;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.animation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.animation-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.step-info {
+  min-width: 80px;
+  text-align: left;
+  font-size: 0.75rem;
+}
+
+.progress-slider {
+  flex: 1;
+  height: 6px;
+}
+
+.control-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-button {
+  background-color: var(--light-bg);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: unset;
+}
+
+.control-button:hover {
+  background-color: #dfe6e9;
+}
+
+.play-button {
+  background-color: var(--primary-color);
+  color: white;
+  width: 36px;
+  height: 36px;
+}
+
+.play-button:hover {
+  background-color: var(--hover-color);
+}
+
+.reset-button {
+  background-color: var(--highlight-color);
+  color: white;
+}
+
+.reset-button:hover {
+  background-color: #c0392b;
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+}
+
+.speed-select {
+  padding: 0.2rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: white;
+  font-size: 0.75rem;
+}
+
+/* 图例样式 */
+.legend {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #bdc3c7;
+  border-radius: 3px;
+}
+
+.legend-color.water {
+  background-color: #ecf0f1;
+}
+
+.legend-color.land {
+  background-color: #2ecc71;
+}
+
+.legend-color.visited {
+  background-color: #7f8c8d;
+}
+
+.legend-color.current {
+  background-color: #f39c12;
+}
+
+.legend-color.exploring {
+  background-color: #9b59b6;
+}
+
+/* 栈/队列可视化器样式 */
+.ds-visualizer {
+  width: 180px;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.ds-visualizer h3 {
+  background-color: var(--dark-bg);
+  color: white;
+  font-weight: bold;
+  padding: 0.4rem;
+  text-align: center;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.stack-container, .queue-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.empty-message {
+  padding: 1rem;
+  text-align: center;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.stack-item, .queue-item {
+  padding: 0.5rem;
+  margin-bottom: 0.3rem;
+  border-radius: 4px;
+  position: relative;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.stack-item {
+  background-color: var(--stack-item);
+  border-left: 3px solid var(--primary-color);
+}
+
+.queue-item {
+  background-color: var(--queue-item);
+  border-left: 3px solid var(--secondary-color);
+}
+
+.item-label {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.65rem;
+  color: #777;
+  background: rgba(255,255,255,0.7);
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.ds-bottom {
+  text-align: center;
+  padding: 0.3rem;
+  font-size: 0.7rem;
+  color: #777;
+  background-color: #eee;
+  border-top: 1px dashed #ddd;
+}
+
+/* 全宽进度条控制区域样式 */
+.animation-controls-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.3rem 0.8rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(5px);
+  border-top: 1px solid var(--border-color);
+}
+
+.animation-controls-footer .control-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0;
+}
+
+.animation-controls-footer .animation-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.animation-controls-footer .progress-slider {
+  flex: 1;
+  height: 6px;
+  cursor: pointer;
+  appearance: none;
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.animation-controls-footer .progress-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+}
+
+.animation-controls-footer .progress-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  border: none;
+}
+
+.animation-controls-footer .step-info {
+  min-width: 60px;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.animation-controls-footer .speed-control {
+  width: 100px;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.7rem;
+}
+
+.animation-controls-footer .control-button {
+  width: 22px;
+  height: 22px;
+  min-width: unset;
+  padding: 0;
+  font-size: 0.7rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.animation-controls-footer .play-button {
+  width: 28px;
+  height: 28px;
+}
+
+.key-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  padding: 1px;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 隐藏原图标当显示快捷键时 */
+.control-button:hover > span:first-child {
+  display: none;
+}
+
+.control-button:hover > .key-hint {
+  display: block;
+  font-size: 9px;
+}
+
+/* 默认隐藏快捷键 */
+.key-hint {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .bottom-section {
+    flex-direction: column;
+  }
+  
+  .left-column, .right-column {
+    flex: 0 0 auto;
+    width: 100%;
+    max-height: 50vh;
+  }
+  
+  .left-column {
+    order: 2;
+  }
+  
+ .right-column {
+    order: 1;
+  }
+  
+  .controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .control-group {
+    flex: 1 1 100%;
+  }
+  
+  .island-grid-container {
+    height: 45vh;
+  }
+  
+  .grid-with-ds-container {
+    flex-direction: column;
+  }
+  
+  .ds-visualizer {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+  
+  .animation-controls-footer {
+    padding: 0.5rem;
+  }
+  
+  .animation-controls-footer .animation-progress {
+    flex-wrap: wrap;
+  }
+  
+  .animation-controls-footer .progress-slider {
+    order: 3;
+    width: 100%;
+    margin-top: 0.3rem;
+  }
+  
+  .animation-controls-footer .step-info {
+    order: 1;
+  }
+  
+  .animation-controls-footer .speed-control {
+    order: 2;
+    margin-left: auto;
+  }
+}
+
+.custom-grid-container {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+.custom-grid-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.custom-grid-input {
+  width: 100%;
+  font-family: monospace;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical; /* 允许垂直调整大小 */
+  height: auto; /* 自动适应内容高度 */
+  min-height: 80px; /* 最小高度 */
+  background-color: #f8f9fa;
+  font-size: 0.8rem;
+  overflow-y: auto; /* 内容多时显示滚动条 */
+}
+
+.custom-grid-container button {
+  margin-top: 0.5rem;
+  width: 100%;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.custom-grid-container button:hover {
+  background-color: #2980b9;
+}
+
+.top-message {
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+  background-color: #f8f8f8;
+  border-left: 4px solid var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.8rem;
+  text-align: left;
+  min-height: 40px;
+  max-height: none;
+  line-height: 1.4;
+  color: var(--text-color);
+  font-weight: 500;
+}
