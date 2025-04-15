@@ -35,7 +35,11 @@ function App() {
     return savedSpeed ? Number(savedSpeed) : 1;
   })
   const [message, setMessage] = useState<string>('')
-  const [algorithm, setAlgorithm] = useState<'dfs' | 'bfs'>('dfs')
+  // 从localStorage读取用户上次选择的算法，如果没有则使用默认值dfs
+  const [algorithm, setAlgorithm] = useState<'dfs' | 'bfs'>(() => {
+    const savedAlgorithm = localStorage.getItem('algorithm');
+    return (savedAlgorithm === 'dfs' || savedAlgorithm === 'bfs') ? savedAlgorithm : 'dfs';
+  })
   const [customGridInput, setCustomGridInput] = useState<string>('')
   const animationRef = useRef<number | null>(null)
   const mainContentRef = useRef<HTMLDivElement>(null);
@@ -50,27 +54,32 @@ function App() {
     localStorage.setItem('animationSpeed', animationSpeed.toString());
   }, [animationSpeed]);
   
+  // 当算法选择变化时，保存到localStorage
+  useEffect(() => {
+    localStorage.setItem('algorithm', algorithm);
+  }, [algorithm]);
+  
   // 使用ResizeObserver监听容器大小变化
   useEffect(() => {
     if (!mainContentRef.current) return;
     
-    const updateLayout = () => {
-      // 触发网格组件重新渲染计算
-      window.dispatchEvent(new Event('resize'));
+    const handleResize = () => {
+      // 仅当窗口大小变化时调用
+      // 避免创建新事件，防止无限递归
     };
     
-    // 初始更新
-    updateLayout();
-    
     // 创建一个ResizeObserver
-    const resizeObserver = new ResizeObserver(updateLayout);
+    const resizeObserver = new ResizeObserver(() => {
+      // 仅记录大小变化，不触发新的resize事件
+      // 避免创建无限循环
+    });
     resizeObserver.observe(mainContentRef.current);
     
-    // 窗口大小变化时也重新计算
-    window.addEventListener('resize', updateLayout);
+    // 窗口大小变化时重新计算
+    window.addEventListener('resize', handleResize);
     
     return () => {
-      window.removeEventListener('resize', updateLayout);
+      window.removeEventListener('resize', handleResize);
       resizeObserver.disconnect();
     };
   }, []);
@@ -320,12 +329,30 @@ function App() {
     // 使用初始化时的随机尺寸生成网格
     generateRandomGrid()
   }, [])
+  
+  // 修改算法选择的处理函数
+  const handleAlgorithmChange = (newAlgorithm: 'dfs' | 'bfs') => {
+    setAlgorithm(newAlgorithm);
+    
+    // 如果有动画步骤，使用新算法重新计算
+    if (grid.length > 0) {
+      resetAnimation();
+      calculateIslandCount(grid);
+    }
+  }
 
   return (
     <div className="app-container">
       <div className="top-section">
         <div className="title-container">
-          <h1>LeetCode 200 - 岛屿数量可视化计算器</h1>
+          <a 
+            href="https://leetcode.com/problems/number-of-islands/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="title-link"
+          >
+            <h1>LeetCode 200 - 岛屿数量可视化计算器</h1>
+          </a>
           <a 
             href="https://github.com/fuck-algorithm/leetcode-200-number-of-islands" 
             target="_blank" 
@@ -367,7 +394,7 @@ function App() {
               onExample1={example1}
               onExample2={example2}
               algorithm={algorithm}
-              onAlgorithmChange={setAlgorithm}
+              onAlgorithmChange={handleAlgorithmChange}
               customGridInput={customGridInput}
               onCustomGridInputChange={setCustomGridInput}
               onCustomGridSubmit={handleCustomGridSubmit}

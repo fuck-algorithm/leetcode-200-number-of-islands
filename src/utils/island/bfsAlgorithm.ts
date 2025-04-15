@@ -44,7 +44,7 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
       currentPosition: [startI, startJ],
       islandCount: count,
       message: `发现陆地 (${startI},${startJ})，开始搜索新岛屿。将其加入队列。`,
-      queue: [...queue]
+      queue: [...queue] // 确保是队列的深拷贝
     });
     
     while (queue.length > 0) {
@@ -53,6 +53,14 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
       
       // 如果单元格已被标记为访问状态（以V开头），说明是重复访问，跳过
       if (grid[i][j].startsWith('V')) {
+        // 记录当前队列状态（在跳过重复访问时也记录状态）
+        steps.push({
+          grid: cloneGrid(grid),
+          currentPosition: [i, j],
+          islandCount: count,
+          message: `单元格 (${i},${j}) 已被访问过，跳过。`,
+          queue: [...queue]
+        });
         continue;
       }
       
@@ -65,11 +73,14 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
         currentPosition: [i, j],
         islandCount: count,
         message: `当前正在访问单元格 (${i},${j})。`,
-        queue: [...queue]
+        queue: [...queue] // 记录更新后的队列状态
       });
       
       // 使用包含岛屿编号的标记，而不是简单的已访问状态
       grid[i][j] = `V${count}`;
+      
+      // 记录邻居的探索状态，用于后续队列添加
+      const neighbors: {ni: number; nj: number; name: string}[] = [];
       
       // 探索四个方向
       for (const { di, dj, name } of DIRECTIONS) {
@@ -81,40 +92,44 @@ export const numIslandsWithAnimationBFS = (originalGrid: Grid): AnimationStep[] 
           // 标记为正在探索，避免重复入队
           grid[ni][nj] = CellState.EXPLORING;
           
-          // 记录探索方向
-          steps.push({
-            grid: cloneGrid(grid),
-            currentPosition: [i, j],
-            exploringDirection: name,
-            islandCount: count,
-            message: `从 (${i},${j}) 向${name}方向探索，发现陆地 (${ni},${nj})。将其加入队列。`,
-            queue: [...queue]
-          });
-          
-          // 将新的位置加入队列
-          queue.push({ i: ni, j: nj });
-          
-          // 记录更新的队列状态
-          steps.push({
-            grid: cloneGrid(grid),
-            currentPosition: [i, j],
-            islandCount: count,
-            message: `将 (${ni},${nj}) 加入队列。`,
-            queue: [...queue]
-          });
+          // 添加到邻居列表
+          neighbors.push({ni, nj, name});
         }
       }
       
-      // BFS中如果队列为空，表示当前连通区域已遍历完成
-      if (queue.length === 0) {
+      // 处理所有邻居
+      for (const {ni, nj, name} of neighbors) {
+        // 记录探索方向
         steps.push({
           grid: cloneGrid(grid),
+          currentPosition: [i, j],
+          exploringDirection: name,
           islandCount: count,
-          message: `队列为空，当前岛屿搜索完成。`,
-          queue: []
+          message: `从 (${i},${j}) 向${name}方向探索，发现陆地 (${ni},${nj})。将其加入队列。`,
+          queue: [...queue] // 记录当前队列状态
+        });
+        
+        // 将新的位置加入队列
+        queue.push({ i: ni, j: nj });
+        
+        // 记录更新的队列状态 - 添加元素后立即记录
+        steps.push({
+          grid: cloneGrid(grid),
+          currentPosition: [i, j],
+          islandCount: count,
+          message: `将 (${ni},${nj}) 加入队列。队列现有 ${queue.length} 个元素。`,
+          queue: [...queue] // 确保是队列的深拷贝
         });
       }
     }
+    
+    // BFS中如果队列为空，表示当前连通区域已遍历完成
+    steps.push({
+      grid: cloneGrid(grid),
+      islandCount: count,
+      message: `队列为空，当前岛屿搜索完成。`,
+      queue: [] // 确保明确设置为空队列
+    });
   };
   
   // 遍历整个网格

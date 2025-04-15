@@ -211,3 +211,55 @@ h1 {
 .back-text {
   font-weight: 500;
 }
+
+.title-link {
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.title-link:hover {
+  transform: translateY(-2px);
+}
+
+.title-link:hover::after {
+  content: '查看LeetCode原题';
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  white-space: nowrap;
+  padding: 3px 8px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.title-link h1 {
+  display: inline-block;
+  position: relative;
+}
+
+.title-link h1::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: var(--primary-color);
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.title-link:hover h1::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
