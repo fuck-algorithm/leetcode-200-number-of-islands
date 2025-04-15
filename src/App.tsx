@@ -327,7 +327,7 @@ function App() {
         <div className="title-container">
           <h1>LeetCode 200 - 岛屿数量可视化计算器</h1>
           <a 
-            href="https://github.com/cc11001100/fuck-algorithm/tree/main/leetcode-200-number-of-islands" 
+            href="https://github.com/fuck-algorithm/leetcode-200-number-of-islands" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="github-link" 
@@ -340,6 +340,16 @@ function App() {
         </div>
         <p className="description">给你一个由 '1'（陆地）和 '0'（水）组成的二维网格，请你计算网格中岛屿的数量。岛屿由相邻的陆地连接而成，可以假设网格的四个边均被水包围。</p>
       </div>
+      
+      {/* 返回列表页链接 */}
+      <a 
+        href="https://fuck-algorithm.github.io/leetcode-hot-100/" 
+        className="back-to-list" 
+        title="返回 LeetCode Hot 100 列表"
+      >
+        <span className="back-arrow">←</span>
+        <span className="back-text">返回列表</span>
+      </a>
       
       <div ref={mainContentRef} className="main-content">
         <div className="bottom-section">
