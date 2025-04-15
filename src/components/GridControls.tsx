@@ -80,7 +80,7 @@ const GridControls: React.FC<GridControlsProps> = ({
       
       <div className="control-group">
         <div className="probability-label">
-          陆地概率: {(landProbability * 100).toFixed(0)}%
+          陆地概率: {(landProbability * 100).toFixed(1)}%
         </div>
         <div className="probability-slider-container">
           <input
@@ -88,7 +88,7 @@ const GridControls: React.FC<GridControlsProps> = ({
             type="range"
             min="0"
             max="1"
-            step="0.1"
+            step="0.01"
             value={landProbability}
             onChange={(e) => onLandProbabilityChange(parseFloat(e.target.value))}
           />
