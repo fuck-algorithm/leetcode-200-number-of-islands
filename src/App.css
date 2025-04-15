@@ -52,8 +52,35 @@ html, body {
   padding-bottom: 1rem;
 }
 
-h1 {
+/* 标题和GitHub图标容器 */
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   margin-bottom: 0.25rem;
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.github-link:hover {
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.github-icon {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+h1 {
+  margin-bottom: 0;
   color: var(--dark-bg);
   font-size: min(2.2vw, 1.8rem);
   text-align: center;
