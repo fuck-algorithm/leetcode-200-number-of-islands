@@ -7,8 +7,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  height: 52px;
-  padding: 7px 18px;
+  height: 46px;
+  padding: 5px 10px;
   border-top: 1px solid #cbdcd2;
   background: rgba(250, 251, 248, 0.96);
   box-shadow: 0 -5px 18px rgba(28, 66, 67, 0.07);
@@ -84,19 +84,23 @@
 .play-button .control-icon { font-size: 15px; }
 
 @media (max-width: 800px) {
-  .animation-controls-footer { gap: 8px; height: 58px; padding: 7px 10px; }
+  .animation-controls-footer { gap: 6px; height: 50px; padding: 5px 7px; }
   .control-buttons { gap: 3px; }
   .control-button { width: 29px; height: 29px; min-width: 29px; }
   .play-button { width: 35px; height: 35px; min-width: 35px; }
+  .control-buttons { flex: 0 0 auto; }
+  .animation-controls-footer .animation-progress { flex: 1 1 0; }
+  .speed-control { flex: 0 0 auto; }
   .animation-controls-footer .animation-progress { gap: 6px; }
   .step-info { min-width: 48px; padding: 4px; font-size: 0.67rem; }
   .speed-control { min-width: 76px; gap: 4px; font-size: 0.68rem; }
   .custom-select-container { min-width: 52px; }
+  .speed-control > span { display: none; }
   .custom-select-trigger { gap: 4px; padding: 5px 6px; font-size: 0.68rem; }
 }
 
 @media (max-width: 460px) {
-  .animation-controls-footer { gap: 6px; padding: 6px; }
+  .animation-controls-footer { gap: 4px; height: 46px; padding: 4px 5px; }
   .control-buttons { gap: 2px; }
   .control-button { width: 27px; height: 29px; min-width: 27px; border-radius: 6px; }
   .play-button { width: 32px; height: 34px; min-width: 32px; }

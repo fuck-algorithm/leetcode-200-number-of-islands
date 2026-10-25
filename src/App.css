@@ -50,7 +50,7 @@ body {
   width: 100%;
   height: 100vh;
   min-height: 0;
-  padding: 14px 18px 52px;
+  padding: 6px 8px 46px;
   overflow: hidden;
   background:
     radial-gradient(ellipse at 8% 12%, rgba(194, 222, 212, 0.5), transparent 33%),
@@ -71,8 +71,8 @@ body {
   position: relative;
   z-index: 2;
   flex: 0 0 auto;
-  margin-bottom: 12px;
-  padding: 12px 20px 10px;
+  margin-bottom: 5px;
+  padding: 4px 14px 3px;
   border: 1px solid rgba(203, 219, 210, 0.9);
   border-radius: 14px;
   background: rgba(250, 251, 248, 0.88);
@@ -82,10 +82,10 @@ body {
 .problem-introduction {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin: 8px auto 0;
+  gap: 12px;
+  margin: 0 auto;
   color: #54716f;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   text-align: center;
 }
 
@@ -104,7 +104,7 @@ body {
   position: relative;
   display: flex;
   flex: 1 1 auto;
-  gap: 14px;
+  gap: 7px;
   min-height: 0;
   overflow: hidden;
 }
@@ -113,10 +113,10 @@ body {
   display: flex;
   flex: 0 0 270px;
   flex-direction: column;
-  gap: 10px;
+  gap: 7px;
   min-height: 0;
   max-height: 100%;
-  padding: 14px 12px;
+  padding: 8px 7px;
   overflow: auto;
   border: 1px solid #d8e4dd;
   border-radius: 14px;
@@ -134,10 +134,10 @@ body {
   min-width: 0;
   min-height: 0;
   max-height: 100%;
-  padding: 10px;
+  padding: 5px;
   overflow: hidden;
   border: 1px solid #d4e1da;
-  border-radius: 16px;
+  border-radius: 12px;
   background: rgba(250, 251, 248, 0.82);
   box-shadow: 0 8px 24px rgba(28, 66, 67, 0.055);
 }
@@ -207,19 +207,19 @@ body {
   .app-container {
     height: auto;
     min-height: 100vh;
-    padding: 10px 10px 106px;
+    padding: 5px 6px 72px;
     overflow: visible;
   }
 
   .top-section {
-    margin-bottom: 10px;
-    padding: 12px 10px 10px;
+    margin-bottom: 4px;
+    padding: 3px 8px 2px;
   }
 
   .problem-introduction {
     flex-direction: column;
-    gap: 3px;
-    font-size: 0.74rem;
+    gap: 1px;
+    font-size: 0.67rem;
   }
 
   .problem-introduction span + span {
@@ -230,14 +230,15 @@ body {
   .bottom-section,
   .main-content {
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     overflow: visible;
   }
 
   .right-column {
     order: 1;
     flex: 0 0 auto;
-    min-height: 52vh;
+    min-height: 48vh;
+    padding: 4px;
     overflow: visible;
   }
 

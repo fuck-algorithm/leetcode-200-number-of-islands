@@ -10,14 +10,14 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 34px;
+  min-height: 26px;
   padding: 0 110px;
 }
 
 .main-title {
   margin: 0;
   color: #123b46;
-  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  font-size: clamp(0.94rem, 1.35vw, 1.12rem);
   font-weight: 700;
   line-height: 1.2;
   text-align: center;
@@ -98,8 +98,9 @@
 .back-to-list:hover { border-color: #a8c9b6; color: #11676c; background: #eaf3ed; }
 
 @media (max-width: 560px) {
-  .title-container { justify-content: flex-start; min-height: 48px; padding: 0 0 0 0; }
-  .main-title { max-width: calc(100% - 150px); font-size: 0.98rem; line-height: 1.25; text-align: left; overflow-wrap: anywhere; }
+  .title-container { justify-content: flex-start; min-height: 28px; padding: 0 150px 0 0; }
+  .title-link { flex: 1 1 auto; min-width: 0; }
+  .main-title { max-width: 100%; font-size: 0.78rem; line-height: 1.15; text-align: left; overflow-wrap: anywhere; }
   .title-right { display: none; }
   .back-to-list { display: none; }
   .language-selector-container { right: 0; }
