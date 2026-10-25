@@ -9,7 +9,7 @@
   min-height: 0;
   overflow: hidden;
   border: 1px solid rgba(14, 82, 97, 0.25);
-  border-radius: 13px;
+  border-radius: 9px;
   background:
     radial-gradient(ellipse at 50% 45%, rgba(97, 172, 180, 0.22), transparent 74%),
     #d6e8e4;
@@ -53,5 +53,5 @@
 }
 
 @media (max-width: 800px) {
-  .island-grid-container { min-height: 300px; border-radius: 10px; }
+  .island-grid-container { min-height: 300px; border-radius: 8px; }
 }

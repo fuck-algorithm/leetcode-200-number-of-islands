@@ -17,12 +17,12 @@
 .top-message {
   display: flex;
   align-items: center;
-  min-height: 42px;
-  max-height: 72px;
+  min-height: 32px;
+  max-height: 52px;
   flex-shrink: 0;
   overflow: auto;
-  margin-bottom: 10px;
-  padding: 0.65rem 0.9rem;
+  margin-bottom: 4px;
+  padding: 0.35rem 0.65rem;
   border: 1px solid #cbded5;
   border-left: 3px solid #167c80;
   border-radius: 8px;
