@@ -1,50 +1,57 @@
 .island-grid-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* 防止溢出 */
-  position: relative; /* 支持绝对定位 */
-}
-
-.grid-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
-  padding: 0.5rem;
-  min-height: 0; /* 允许容器收缩 */
+  border: 1px solid rgba(14, 82, 97, 0.25);
+  border-radius: 13px;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(97, 172, 180, 0.22), transparent 74%),
+    #d6e8e4;
 }
 
-svg {
+.island-grid-container::before,
+.island-grid-container::after {
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(26, 104, 111, 0.09);
+  border-radius: 10px;
+  content: '';
+  pointer-events: none;
+}
+.island-grid-container::after { inset: 20px; border-color: rgba(26, 104, 111, 0.055); }
+
+.island-grid-container svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
-  border: 1px solid var(--border-color);
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 100%; /* 确保SVG占满容器高度 */
-  width: 100%; /* 确保SVG占满容器宽度 */
-  object-fit: contain; /* 保持宽高比 */
+  overflow: visible;
+  object-fit: contain;
 }
 
-/* 添加不同岛屿的颜色样式 */
-.v1 { background-color: hsl(30, 70%, 65%); }
-.v2 { background-color: hsl(60, 70%, 65%); }
-.v3 { background-color: hsl(90, 70%, 65%); }
-.v4 { background-color: hsl(120, 70%, 65%); }
-.v5 { background-color: hsl(150, 70%, 65%); }
-.v6 { background-color: hsl(180, 70%, 65%); }
-.v7 { background-color: hsl(210, 70%, 65%); }
-.v8 { background-color: hsl(240, 70%, 65%); }
-.v9 { background-color: hsl(270, 70%, 65%); }
-.v10 { background-color: hsl(300, 70%, 65%); }
-.v11 { background-color: hsl(330, 70%, 65%); }
-.v12 { background-color: hsl(0, 70%, 65%); }
+.ocean-base { stroke: #126c7c; stroke-width: 1; }
+.ocean-texture { pointer-events: none; opacity: 0.72; }
+.land-tile { transition: fill 160ms ease, stroke 160ms ease; }
+.shoreline { opacity: 0.92; }
+.visited-tile { stroke-dasharray: 3 1; }
+.current-tile { filter: drop-shadow(0 0 4px rgba(223, 121, 89, 0.7)); }
+.exploring-tile { filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.65)); }
+.direction-arrow { pointer-events: none; filter: drop-shadow(0 1px 2px rgba(9, 55, 70, 0.65)); }
+.grid-axis text { fill: #315c64; font-size: 10px; font-family: inherit; font-weight: 600; }
 
-@media (max-width: 768px) {
-  .island-grid-container {
-    height: 45vh;
-  }
-} 
+@media (prefers-reduced-motion: reduce) {
+  .land-tile { transition: none; }
+}
+
+@media (max-width: 800px) {
+  .island-grid-container { min-height: 300px; border-radius: 10px; }
+}

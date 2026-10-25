@@ -1,45 +1,36 @@
 .custom-grid-container {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  width: 100%;
   position: relative;
   z-index: 5;
+  width: 100%;
+  margin: 0;
 }
 
-.custom-grid-label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.85rem;
-}
-
+.custom-grid-label { display: flex; flex-direction: column; gap: 0.45rem; color: #476462; font-size: 0.78rem; font-weight: 600; }
 .custom-grid-input {
   width: 100%;
-  font-family: monospace;
-  padding: 0.4rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical; /* 允许垂直调整大小 */
-  height: auto; /* 自动适应内容高度 */
-  min-height: 80px; /* 最小高度 */
-  max-height: 150px; /* 限制最大高度 */
-  background-color: #f8f9fa;
-  font-size: 0.8rem;
-  overflow-y: auto; /* 内容多时显示滚动条 */
+  min-height: 90px;
+  max-height: 180px;
+  padding: 0.65rem;
+  resize: vertical;
+  overflow: auto;
+  border: 1px solid #cbdad1;
+  border-radius: 8px;
+  color: #24474b;
+  background: #fff;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
-
 .custom-grid-container button {
-  margin-top: 0.5rem;
   width: 100%;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 0.5rem;
-  font-weight: bold;
+  margin-top: 0.55rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #d1dfd7;
+  border-radius: 7px;
+  color: #315958;
+  background: #fff;
+  font-size: 0.79rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
-
-.custom-grid-container button:hover {
-  background-color: #2980b9;
-} 
+.custom-grid-container button:hover { border-color: #9cbcae; background: #edf5f0; }

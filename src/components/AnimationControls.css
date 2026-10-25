@@ -1,572 +1,114 @@
-/* 动画控制区域样式 */
 .animation-controls-footer {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 0.15rem 0.4rem; /* 进一步减小内边距 */
-  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.04); /* 减轻阴影 */
   z-index: 100;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.2rem; /* 从0.3rem减小到0.2rem */
-  backdrop-filter: blur(5px);
-  border-top: 1px solid rgba(0, 0, 0, 0.05); /* 减轻边框 */
-  height: 36px; /* 从40px减小到36px */
-  margin-top: 0;
-}
-
-.control-buttons {
-  display: flex;
-  align-items: center;
-  gap: 0.15rem; /* 从0.2rem减小到0.15rem */
-  margin-bottom: 0;
-  margin-right: 0.15rem; /* 从0.2rem减小到0.15rem */
-}
-
-.control-button {
-  background-color: #f0f2f5;
-  border: none;
-  border-radius: 50%;
-  width: 26px; /* 从28px减小到26px */
-  height: 26px; /* 从28px减小到26px */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: unset;
-  position: relative;
-  overflow: hidden;
-  color: #424242;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); /* 减轻阴影 */
-  margin: 0;
-}
-
-.control-button:hover {
-  background-color: #e6e8eb;
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-}
-
-.control-button:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.control-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
-  background-color: #f4f4f4;
-}
-
-.play-button {
-  background-color: var(--primary-color);
-  color: white;
-  width: 32px; /* 从34px减小到32px */
-  height: 32px; /* 从34px减小到32px */
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(52, 152, 219, 0.25); /* 减轻阴影 */
-}
-
-.play-button:hover {
-  background-color: var(--hover-color);
-  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
-}
-
-.play-button.playing {
-  background-color: #ff5252;
-  box-shadow: 0 2px 5px rgba(255, 82, 82, 0.3);
-}
-
-.play-button.playing:hover {
-  background-color: #ff3232;
-  box-shadow: 0 4px 8px rgba(255, 82, 82, 0.4);
-}
-
-.play-button.playing::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 70%);
-  top: 0;
-  left: 0;
-  opacity: 0;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-.reset-button {
-  background-color: var(--highlight-color);
-  color: white;
-  box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
-}
-
-.reset-button:hover {
-  background-color: #c0392b;
-  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
-}
-
-.animation-controls-footer .animation-progress {
-  display: flex;
-  align-items: center;
-  gap: 0.15rem; /* 从0.2rem减小到0.15rem */
-  margin-bottom: 0;
-  flex: 1;
-  position: relative;
-  max-width: calc(100% - 200px); /* 从210px减小到200px */
-}
-
-.step-info {
-  min-width: 50px; /* 从55px减小到50px */
-  text-align: center;
-  font-size: 0.65rem; /* 从0.7rem减小到0.65rem */
-  font-weight: bold;
-  color: #34495e;
-  background-color: rgba(240, 240, 240, 0.7);
-  padding: 0.1rem 0.25rem; /* 减小内边距 */
-  border-radius: 3px;
-  margin: 0;
-}
-
-/* 新的进度条样式 */
-.animation-progress .progress-container {
-  flex: 1;
-  height: 6px; /* 减小进度条高度 */
-  background-color: #e0e0e0;
-  border-radius: 3px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-}
-
-.animation-progress .progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #3498db 0%, #2ecc71 100%);
-  border-radius: 4px;
-  transition: width 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-/* 进度条填充动画效果 */
-.animation-progress .progress-fill::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0) 0%, 
-    rgba(255, 255, 255, 0.4) 50%, 
-    rgba(255, 255, 255, 0) 100%);
-  animation: progress-shine 1.5s linear infinite;
-}
-
-/* 前进效果动画 */
-@keyframes progress-shine {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* 进度点样式 */
-.animation-progress .progress-handle {
-  width: 16px;
-  height: 16px;
-  background-color: white;
-  border: 2px solid #3498db;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  transition: left 0.3s ease;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-}
-
-.animation-progress .progress-handle:hover,
-.animation-progress .progress-handle:active {
-  transform: translate(-50%, -50%) scale(1.2);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-}
-
-/* 动态波纹效果 */
-.animation-progress .progress-handle::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(52, 152, 219, 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  animation: handle-pulse 2s infinite;
-}
-
-@keyframes handle-pulse {
-  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-  70% { opacity: 0; }
-  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
-}
-
-.progress-container.dragging {
-  height: 16px;
-}
-
-.progress-container.dragging .progress-handle {
-  transform: translate(-50%, -50%) scale(1.3);
-  box-shadow: 0 0 0 6px rgba(61, 139, 255, 0.3);
-}
-
-.progress-handle.pulse-handle {
-  animation: handle-pulse 0.5s ease-out;
-}
-
-.speed-control {
-  display: flex;
-  align-items: center;
-  gap: 0.15rem; /* 从0.2rem减小到0.15rem */
-  font-size: 0.65rem; /* 从0.7rem减小到0.65rem */
-  min-width: 85px; /* 从90px减小到85px */
-  position: relative;
-  margin-left: 0.15rem; /* 从0.2rem减小到0.15rem */
-}
-
-.speed-control span {
-  font-weight: 500;
-  color: #444;
-}
-
-/* 完全重设下拉框样式 */
-.speed-select {
-  appearance: none !important; 
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  width: 60px !important;
-  padding: 0.3rem 0.5rem !important;
-  padding-right: 1.2rem !important; 
-  border: 1px solid #ccc !important;
-  border-radius: 4px !important;
-  background-color: white !important;
-  color: #333 !important;
-  font-size: 0.75rem !important;
-  font-weight: 500 !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
-  background-repeat: no-repeat !important;
-  background-position: right 0.4rem center !important;
-  background-size: 0.8rem !important;
-  text-align: left !important;
-}
-
-.speed-select:hover {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
-}
-
-.speed-select:focus {
-  outline: none !important;
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.25) !important;
-}
-
-/* 禁用原生下拉箭头 */
-.speed-select::-ms-expand {
-  display: none;
-}
-
-/* Chrome和Safari中的滚动条样式 */
-.speed-select::-webkit-scrollbar {
-  width: 8px;
-}
-
-.speed-select::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.speed-select::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-
-.speed-select::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-/* 下拉框选项样式 */
-.speed-select option {
-  padding: 8px !important;
-  font-size: 0.75rem !important;
-  background-color: white !important;
-  color: #333 !important;
-}
-
-/* 视觉隐藏元素但保留可访问性 */
-.visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-/* 自定义下拉菜单样式 */
-.custom-select-container {
-  position: relative;
-  min-width: 60px;
-  user-select: none;
-}
-
-.custom-select-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.3rem 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  cursor: pointer;
-  font-size: 0.75rem;
-  font-weight: 500;
-  transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.custom-select-trigger:hover {
-  border-color: var(--primary-color);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
-.custom-select-arrow {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 6px;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid #333;
-  transition: transform 0.2s;
-}
-
-.custom-select-options {
-  position: absolute;
-  bottom: 100%;
   left: 0;
-  right: 0;
-  margin-bottom: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-  max-height: 150px;
-  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 7px 18px;
+  border-top: 1px solid #cbdcd2;
+  background: rgba(250, 251, 248, 0.96);
+  box-shadow: 0 -5px 18px rgba(28, 66, 67, 0.07);
+  backdrop-filter: blur(12px);
 }
 
-.custom-select-option {
-  padding: 0.4rem 0.5rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.custom-select-option:hover {
-  background-color: #f0f8ff;
-}
-
-.custom-select-option.selected {
-  background-color: rgba(52, 152, 219, 0.1);
-  font-weight: bold;
-  color: var(--primary-color);
-}
-
-/* Chrome和Safari中的滚动条样式 */
-.custom-select-options::-webkit-scrollbar {
-  width: 6px;
-}
-
-.custom-select-options::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.custom-select-options::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
-}
-
-.custom-select-options::-webkit-scrollbar-thumb:hover {
-  background: #aaa;
-}
-
-/* 媒体查询适配移动设备 */
-@media (max-width: 768px) {
-  .animation-controls-footer {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .control-buttons {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .animation-progress {
-    width: 100%;
-    margin: 0;
-  }
-  
-  .speed-control {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-/* 控制按钮的工具提示样式增强 - 修复版 */
+.control-buttons { display: flex; align-items: center; gap: 5px; margin: 0; }
 .control-button {
-  position: relative !important;
-}
-
-/* 美化后的tooltip样式 */
-.tooltip {
-  position: fixed !important;
-  z-index: 999999 !important;
-  background-color: rgba(33, 41, 52, 0.95) !important;
-  color: #fff !important;
-  padding: 8px 12px !important;
-  border-radius: 6px !important;
-  font-size: 12px !important;
-  font-weight: normal !important;
-  pointer-events: none !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  max-width: 250px !important;
-  text-align: center !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  line-height: 1.5 !important;
-  animation: tooltip-fade-in 0.2s cubic-bezier(0.23, 1, 0.32, 1) !important;
-  backdrop-filter: blur(3px) !important;
-  white-space: normal !important;
-  word-break: normal !important;
-  letter-spacing: 0.3px !important;
-}
-
-/* 添加小箭头 */
-.tooltip::after {
-  content: '' !important;
-  position: absolute !important;
-  top: 100% !important;
-  left: 50% !important;
-  margin-left: -5px !important;
-  border-width: 5px !important;
-  border-style: solid !important;
-  border-color: rgba(33, 41, 52, 0.95) transparent transparent transparent !important;
-}
-
-/* 为不同类型的按钮提供不同的tooltip颜色变体 */
-.play-button .tooltip,
-.tooltip-primary {
-  background-color: rgba(52, 152, 219, 0.95) !important;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25) !important;
-}
-
-.play-button .tooltip::after,
-.tooltip-primary::after {
-  border-color: rgba(52, 152, 219, 0.95) transparent transparent transparent !important;
-}
-
-.reset-button .tooltip,
-.tooltip-danger {
-  background-color: rgba(231, 76, 60, 0.95) !important;
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25) !important;
-}
-
-.reset-button .tooltip::after,
-.tooltip-danger::after {
-  border-color: rgba(231, 76, 60, 0.95) transparent transparent transparent !important;
-}
-
-/* 改进淡入动画 */
-@keyframes tooltip-fade-in {
-  from { 
-    opacity: 0; 
-    transform: translateY(8px) scale(0.95); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0) scale(1); 
-  }
-}
-
-/* 脉冲动画 */
-@keyframes pulse {
-  0% { opacity: 0.7; }
-  50% { opacity: 0; }
-  100% { opacity: 0.7; }
-}
-
-/* 控制按钮图标样式优化 */
-.control-button svg {
-  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
-}
-
-.play-button svg {
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
-  width: 26px;
-  height: 26px;
-}
-
-/* 为禁用按钮添加视觉反馈 */
-.control-button:disabled svg {
-  opacity: 0.4;
-}
-
-/* 鼠标悬停时按钮图标动效 */
-.control-button:hover svg {
-  transform: scale(1.1);
-  transition: transform 0.2s ease;
-}
-
-.control-button:active svg {
-  transform: scale(0.9);
-}
-
-/* 控制图标样式 */
-.control-icon {
-  font-size: 12px; /* 从13px减小到12px */
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: Arial, sans-serif;
-  line-height: 1;
-  font-weight: bold;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #d6e2db;
+  border-radius: 8px;
+  color: #315d5d;
+  background: #f2f6f2;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+.control-button:hover { transform: translateY(-1px); border-color: #9cbcae; background: #e7f0e9; box-shadow: none; }
+.control-button:active { transform: translateY(0); }
+.control-button:disabled { transform: none; opacity: 0.4; box-shadow: none; cursor: not-allowed; }
+.play-button { width: 38px; height: 38px; min-width: 38px; border-color: #167c80; color: #fff; background: #167c80; box-shadow: 0 3px 8px rgba(22, 124, 128, 0.2); }
+.play-button:hover { border-color: #11676c; color: #fff; background: #11676c; box-shadow: 0 3px 8px rgba(22, 124, 128, 0.2); }
+.play-button.playing { border-color: #b9573b; background: #c76649; }
+.play-button.playing:hover { background: #b9573b; }
+.reset-button { color: #a04f39; background: #fbefea; border-color: #ecd2c9; }
+.reset-button:hover { color: #903e2c; background: #f6e3dc; border-color: #dcae9f; }
+
+.animation-controls-footer .animation-progress { position: relative; display: flex; flex: 1; align-items: center; gap: 10px; min-width: 0; margin: 0; }
+.step-info { min-width: 62px; margin: 0; padding: 4px 7px; border-radius: 6px; color: #42615f; background: #edf3ee; font-size: 0.72rem; font-weight: 650; text-align: center; font-variant-numeric: tabular-nums; }
+.animation-progress .progress-container { position: relative; flex: 1; height: 6px; overflow: visible; border-radius: 4px; background: #dce7e0; cursor: pointer; touch-action: none; }
+.animation-progress .progress-fill { position: relative; height: 100%; overflow: hidden; border-radius: inherit; background: #57928b; transition: width 180ms ease; }
+.animation-progress .progress-fill::after { position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); content: ''; }
+.animation-progress .progress-fill.playing::after { animation: progress-shine 1.5s linear infinite; }
+@keyframes progress-shine { to { transform: translateX(100%); } }
+.animation-progress .progress-handle { position: absolute; z-index: 2; top: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 50%; background: #167c80; box-shadow: 0 0 0 1px #167c80; transition: left 180ms ease; }
+.animation-progress .progress-handle:hover,
+.animation-progress .progress-handle:active { transform: translate(-50%, -50%) scale(1.12); }
+.animation-progress .progress-handle::before { position: absolute; inset: -4px; border: 1px solid rgba(22,124,128,.3); border-radius: 50%; content: ''; }
+.progress-container.dragging { height: 12px; }
+.progress-container.dragging .progress-handle { transform: translate(-50%, -50%) scale(1.15); }
+.progress-handle.pulse-handle { animation: handle-pulse 450ms ease-out; }
+@keyframes handle-pulse { 50% { box-shadow: 0 0 0 6px rgba(22,124,128,.18); } }
+
+.speed-control { position: relative; display: flex; align-items: center; gap: 7px; min-width: 106px; margin-left: 0; color: #42615f; font-size: 0.76rem; }
+.speed-control span { font-weight: 550; }
+.speed-select { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.custom-select-container { position: relative; min-width: 62px; user-select: none; }
+.custom-select-trigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px solid #d1dfd7; border-radius: 7px; color: #315958; background: #fff; font-size: 0.76rem; font-weight: 600; cursor: pointer; }
+.custom-select-trigger:hover { border-color: #9cbcae; background: #f6f9f6; }
+.custom-select-arrow { display: inline-block; width: 0; height: 0; border-top: 4px solid #54716f; border-right: 4px solid transparent; border-left: 4px solid transparent; }
+.custom-select-options { position: absolute; z-index: 12; right: 0; bottom: calc(100% + 7px); min-width: 76px; padding: 4px; border: 1px solid #d1dfd7; border-radius: 8px; background: #fff; box-shadow: 0 6px 18px rgba(18,59,70,.12); }
+.custom-select-option { padding: 6px 8px; border-radius: 5px; color: #315958; font-size: 0.76rem; cursor: pointer; }
+.custom-select-option:hover { background: #edf5f0; }
+.custom-select-option.selected { color: #11676c; background: #e4f0e9; font-weight: 700; }
+
+.visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
+.tooltip { position: fixed !important; z-index: 999999 !important; max-width: 250px !important; padding: 7px 10px !important; border: 1px solid rgba(255,255,255,.12) !important; border-radius: 6px !important; color: #fff !important; background: rgba(23,59,67,.96) !important; box-shadow: 0 4px 12px rgba(18,59,70,.18) !important; font-size: 12px !important; font-weight: 500 !important; line-height: 1.45 !important; text-align: center !important; pointer-events: none !important; white-space: normal !important; backdrop-filter: blur(4px) !important; }
+.tooltip::after { position: absolute !important; top: 100% !important; left: 50% !important; margin-left: -5px !important; border: 5px solid transparent !important; border-top-color: rgba(23,59,67,.96) !important; content: '' !important; }
+.tooltip-primary { background: rgba(23,59,67,.96) !important; }
+.tooltip-primary::after { border-top-color: rgba(23,59,67,.96) !important; }
+.control-button svg { width: 20px; height: 20px; }
+.control-button:hover svg { transform: scale(1.04); transition: transform 150ms ease; }
+.control-icon { display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; line-height: 1; }
+.play-button .control-icon { font-size: 15px; }
+
+@media (max-width: 800px) {
+  .animation-controls-footer { gap: 8px; height: 58px; padding: 7px 10px; }
+  .control-buttons { gap: 3px; }
+  .control-button { width: 29px; height: 29px; min-width: 29px; }
+  .play-button { width: 35px; height: 35px; min-width: 35px; }
+  .animation-controls-footer .animation-progress { gap: 6px; }
+  .step-info { min-width: 48px; padding: 4px; font-size: 0.67rem; }
+  .speed-control { min-width: 76px; gap: 4px; font-size: 0.68rem; }
+  .custom-select-container { min-width: 52px; }
+  .custom-select-trigger { gap: 4px; padding: 5px 6px; font-size: 0.68rem; }
 }
 
-.play-button .control-icon {
-  font-size: 14px; /* 从15px减小到14px */
+@media (max-width: 460px) {
+  .animation-controls-footer { gap: 6px; padding: 6px; }
+  .control-buttons { gap: 2px; }
+  .control-button { width: 27px; height: 29px; min-width: 27px; border-radius: 6px; }
+  .play-button { width: 32px; height: 34px; min-width: 32px; }
+  .control-icon { font-size: 11px; }
+  .play-button .control-icon { font-size: 13px; }
+  .animation-controls-footer .animation-progress { gap: 4px; }
+  .step-info { min-width: 42px; font-size: 0.62rem; }
+  .speed-control { min-width: 56px; }
+  .speed-control > span { display: none; }
 }
 
-/* 修改悬停效果，针对图标进行优化 */
-.control-button:hover .control-icon {
-  transform: scale(1.1);
-  transition: transform 0.2s ease;
+@media (prefers-reduced-motion: reduce) {
+  .control-button, .animation-progress .progress-fill, .animation-progress .progress-handle { transition: none; }
+  .animation-progress .progress-fill.playing::after, .progress-handle.pulse-handle { animation: none; }
 }
-
-.control-button:active .control-icon {
-  transform: scale(0.9);
-}
-
